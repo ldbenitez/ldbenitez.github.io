@@ -1,25 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  
-  <sitemap>
-    <loc>https://adityatelange.github.io/hugo-PaperMod/en/sitemap.xml</loc>
-    
-      <lastmod>2021-01-20T00:00:00+00:00</lastmod>
-    
-  </sitemap>
-  
-  <sitemap>
-    <loc>https://adityatelange.github.io/hugo-PaperMod/fr/sitemap.xml</loc>
-    
-      <lastmod>2019-03-11T00:00:00+00:00</lastmod>
-    
-  </sitemap>
-  
-  <sitemap>
-    <loc>https://adityatelange.github.io/hugo-PaperMod/fa/sitemap.xml</loc>
-    
-      <lastmod>2019-03-11T00:00:00+00:00</lastmod>
-    
-  </sitemap>
-  
-</sitemapindex>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>ldbenitez.github.io/categories/</loc>
+  </url><url>
+    <loc>ldbenitez.github.io/</loc>
+  </url><url>
+    <loc>ldbenitez.github.io/tags/</loc>
+  </url>
+</urlset>
