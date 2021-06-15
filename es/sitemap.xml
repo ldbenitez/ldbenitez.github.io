@@ -27,6 +27,16 @@
                 />
   </url><url>
     <loc>/es/archives/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/archives/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="es"
+                href="/es/archives/"
+                />
   </url><url>
     <loc>/es/tags/</loc>
     <xhtml:link
