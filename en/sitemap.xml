@@ -14,17 +14,7 @@
                 href="/"
                 />
   </url><url>
-    <loc>/archives/</loc>
-    <xhtml:link
-                rel="alternate"
-                hreflang="es"
-                href="/es/archives/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/archives/"
-                />
+    <loc>/post-from-forestry/</loc>
   </url><url>
     <loc>/search/</loc>
     <xhtml:link
