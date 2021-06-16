@@ -2,52 +2,52 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>/</loc>
+    <loc>https://ldbenitez.github.io/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="es"
-                href="/es/"
+                href="https://ldbenitez.github.io/es/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/"
+                href="https://ldbenitez.github.io/"
                 />
   </url><url>
-    <loc>/archives/</loc>
+    <loc>https://ldbenitez.github.io/archives/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="es"
-                href="/es/archives/"
+                href="https://ldbenitez.github.io/es/archives/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/archives/"
+                href="https://ldbenitez.github.io/archives/"
                 />
   </url><url>
-    <loc>/search/</loc>
+    <loc>https://ldbenitez.github.io/search/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="es"
-                href="/es/search/"
+                href="https://ldbenitez.github.io/es/search/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/search/"
+                href="https://ldbenitez.github.io/search/"
                 />
   </url><url>
-    <loc>/tags/</loc>
+    <loc>https://ldbenitez.github.io/tags/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="es"
-                href="/es/tags/"
+                href="https://ldbenitez.github.io/es/tags/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/tags/"
+                href="https://ldbenitez.github.io/tags/"
                 />
   </url>
 </urlset>

@@ -2,52 +2,52 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>/es/search/</loc>
+    <loc>https://ldbenitez.github.io/es/search/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/search/"
+                href="https://ldbenitez.github.io/search/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="es"
-                href="/es/search/"
+                href="https://ldbenitez.github.io/es/search/"
                 />
   </url><url>
-    <loc>/es/</loc>
+    <loc>https://ldbenitez.github.io/es/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/"
+                href="https://ldbenitez.github.io/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="es"
-                href="/es/"
+                href="https://ldbenitez.github.io/es/"
                 />
   </url><url>
-    <loc>/es/archives/</loc>
+    <loc>https://ldbenitez.github.io/es/archives/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/archives/"
+                href="https://ldbenitez.github.io/archives/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="es"
-                href="/es/archives/"
+                href="https://ldbenitez.github.io/es/archives/"
                 />
   </url><url>
-    <loc>/es/tags/</loc>
+    <loc>https://ldbenitez.github.io/es/tags/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/tags/"
+                href="https://ldbenitez.github.io/tags/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="es"
-                href="/es/tags/"
+                href="https://ldbenitez.github.io/es/tags/"
                 />
   </url>
 </urlset>
