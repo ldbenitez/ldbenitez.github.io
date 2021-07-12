@@ -14,18 +14,6 @@
                 href="https://ldbenitez.github.io/es/search/"
                 />
   </url><url>
-    <loc>https://ldbenitez.github.io/es/</loc>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://ldbenitez.github.io/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="es"
-                href="https://ldbenitez.github.io/es/"
-                />
-  </url><url>
     <loc>https://ldbenitez.github.io/es/archives/</loc>
     <xhtml:link
                 rel="alternate"
@@ -48,6 +36,18 @@
                 rel="alternate"
                 hreflang="es"
                 href="https://ldbenitez.github.io/es/tags/"
+                />
+  </url><url>
+    <loc>https://ldbenitez.github.io/es/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://ldbenitez.github.io/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="es"
+                href="https://ldbenitez.github.io/es/"
                 />
   </url>
 </urlset>

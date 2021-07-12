@@ -2,18 +2,6 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://ldbenitez.github.io/</loc>
-    <xhtml:link
-                rel="alternate"
-                hreflang="es"
-                href="https://ldbenitez.github.io/es/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://ldbenitez.github.io/"
-                />
-  </url><url>
     <loc>https://ldbenitez.github.io/archives/</loc>
     <xhtml:link
                 rel="alternate"
@@ -48,6 +36,18 @@
                 rel="alternate"
                 hreflang="en"
                 href="https://ldbenitez.github.io/tags/"
+                />
+  </url><url>
+    <loc>https://ldbenitez.github.io/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="es"
+                href="https://ldbenitez.github.io/es/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://ldbenitez.github.io/"
                 />
   </url>
 </urlset>
