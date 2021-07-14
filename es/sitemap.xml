@@ -2,52 +2,52 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://ldbenitez.github.io/es/search/</loc>
+    <loc>https://lbenitez.dev/es/search/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://ldbenitez.github.io/search/"
+                href="https://lbenitez.dev/search/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="es"
-                href="https://ldbenitez.github.io/es/search/"
+                href="https://lbenitez.dev/es/search/"
                 />
   </url><url>
-    <loc>https://ldbenitez.github.io/es/archives/</loc>
+    <loc>https://lbenitez.dev/es/archives/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://ldbenitez.github.io/archives/"
+                href="https://lbenitez.dev/archives/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="es"
-                href="https://ldbenitez.github.io/es/archives/"
+                href="https://lbenitez.dev/es/archives/"
                 />
   </url><url>
-    <loc>https://ldbenitez.github.io/es/tags/</loc>
+    <loc>https://lbenitez.dev/es/tags/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://ldbenitez.github.io/tags/"
+                href="https://lbenitez.dev/tags/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="es"
-                href="https://ldbenitez.github.io/es/tags/"
+                href="https://lbenitez.dev/es/tags/"
                 />
   </url><url>
-    <loc>https://ldbenitez.github.io/es/</loc>
+    <loc>https://lbenitez.dev/es/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://ldbenitez.github.io/"
+                href="https://lbenitez.dev/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="es"
-                href="https://ldbenitez.github.io/es/"
+                href="https://lbenitez.dev/es/"
                 />
   </url>
 </urlset>
