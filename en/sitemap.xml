@@ -2,6 +2,18 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://lbenitez.dev/about/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="es"
+                href="https://lbenitez.dev/es/about/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://lbenitez.dev/about/"
+                />
+  </url><url>
     <loc>https://lbenitez.dev/archives/</loc>
     <xhtml:link
                 rel="alternate"
