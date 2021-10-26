@@ -2,25 +2,6 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://lbenitez.dev/posts/hello-world/</loc>
-    <lastmod>2021-09-28T20:26:00+00:00</lastmod>
-  </url><url>
-    <loc>https://lbenitez.dev/posts/</loc>
-    <lastmod>2021-09-28T20:26:00+00:00</lastmod>
-  </url><url>
-    <loc>https://lbenitez.dev/</loc>
-    <lastmod>2021-09-28T20:26:00+00:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="es"
-                href="https://lbenitez.dev/es/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://lbenitez.dev/"
-                />
-  </url><url>
     <loc>https://lbenitez.dev/about/</loc>
     <xhtml:link
                 rel="alternate"
@@ -67,6 +48,18 @@
                 rel="alternate"
                 hreflang="en"
                 href="https://lbenitez.dev/tags/"
+                />
+  </url><url>
+    <loc>https://lbenitez.dev/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="es"
+                href="https://lbenitez.dev/es/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://lbenitez.dev/"
                 />
   </url>
 </urlset>
