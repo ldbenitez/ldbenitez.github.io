@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{%- block title -%}
+{{ section.title }} | {{ config.title }}
+{%- endblock -%}
+
+{%- block main -%}
+{%- set posts = get_section(path="posts/_index.md") -%}
+<h1>{{ section.title }}</h1>
+<p>All {{ posts.pages | length }} posts</p>
+
+<ul class="archive-list">
+{%- for post in posts.pages %}
+    <li>
+        <time datetime="{{ post.date }}">{{ post.date | date(format="%Y.%m.%d") }}</time>
+        <a href="{{ post.permalink | safe }}">{{ post.title }}</a>
+    </li>
+{%- endfor %}
+</ul>
+{%- endblock -%}

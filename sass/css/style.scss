@@ -1,0 +1,26 @@
+// Main stylesheet entry point for the site
+//
+// Load order:
+// 1. Theme base styles (from terminus theme)
+// 2. Local overrides (fonts, colors, header layout)
+//
+// To add new overrides, create a new partial in sass/css/
+// and @use it at the bottom of this file.
+
+// Theme base styles
+@use '../../themes/terminus/sass/css/themes';
+@use '../../themes/terminus/sass/css/main';
+@use '../../themes/terminus/sass/css/menu';
+@use '../../themes/terminus/sass/css/header' as theme-header;
+@use '../../themes/terminus/sass/css/footer';
+@use '../../themes/terminus/sass/css/post';
+@use '../../themes/terminus/sass/css/code';
+@use '../../themes/terminus/sass/css/pagination';
+@use '../../themes/terminus/sass/css/taxonomies';
+@use '../../themes/terminus/sass/css/alerts';
+@use '../../themes/terminus/sass/css/shortcodes';
+
+// Local overrides (loaded after theme to override)
+@use 'fonts';
+@use 'overrides';
+@use 'header';

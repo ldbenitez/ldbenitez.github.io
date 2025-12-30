@@ -1,0 +1,16 @@
+@font-face {
+    font-family: 'Geist Mono';
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('/fonts/GeistMono-Regular.woff2') format('woff2');
+}
+
+// Override theme's font-family with Geist Mono
+body {
+    font-family: 'Geist Mono', Monaco, Consolas, 'Ubuntu Mono', monospace;
+}
+
+code, kbd, pre {
+    font-family: 'Geist Mono', Monaco, Consolas, 'Ubuntu Mono', monospace;
+}

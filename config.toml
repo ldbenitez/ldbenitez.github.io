@@ -1,0 +1,50 @@
+# The URL the site will be built for
+base_url = "https://lbenitez.dev"
+
+# The site title and description; used in feeds by default.
+title = "lbenitez.dev"
+author = "Leonardo Benítez"
+
+# The site theme to use
+theme = "terminus"
+
+# Whether to automatically compile all Sass files in the sass directory
+compile_sass = true
+
+# The taxonomies to be rendered for the site and their configuration
+taxonomies = [
+    { name = "tags", feed = true }
+]
+
+# Whether to build a search index to be used later on by a JavaScript library
+build_search_index = false
+
+[markdown]
+# Whether to do syntax highlighting
+highlight_code = true
+
+# Use CSS classes for syntax highlighting (enables theme switching)
+highlight_theme = "css"
+
+# When set to "true", emoji aliases translated to their corresponding
+# Unicode emoji equivalent in the rendered Markdown files. (e.g.: :smile: => 😄)
+render_emoji = true
+
+[extra]
+close_responsive_menu_on_resize = true
+favicon_emoji = "👨‍💻"
+header_title = "lbenitez.dev/thoughts"
+layout = "center"
+show_default_author = false
+
+main_menu = [
+    { name = "posts", url = "posts", trailing_slash = true },
+    { name = "tags", url = "tags", trailing_slash = true },
+    { name = "archive", url = "archive", trailing_slash = true },
+]
+
+socials = [
+    { name = "github", url = "https://github.com/ldbenitez" },
+]
+
+copyright = "© $YEAR $AUTHOR :: Powered by [Zola](https://www.getzola.org)"
