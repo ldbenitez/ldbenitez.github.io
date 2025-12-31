@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://lbenitez.dev/</loc>
+    </url>
+    <url>
+        <loc>https://lbenitez.dev/archive/</loc>
+    </url>
+    <url>
+        <loc>https://lbenitez.dev/posts/</loc>
+    </url>
+    <url>
+        <loc>https://lbenitez.dev/posts/and-thus-it-begins/</loc>
+        <lastmod>2025-12-29</lastmod>
+    </url>
+    <url>
+        <loc>https://lbenitez.dev/posts/page/1/</loc>
+    </url>
+    <url>
+        <loc>https://lbenitez.dev/tags/</loc>
+    </url>
+    <url>
+        <loc>https://lbenitez.dev/tags/thoughts/</loc>
+    </url>
+</urlset>

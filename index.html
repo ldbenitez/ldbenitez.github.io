@@ -1,0 +1,12 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Redirect</title>
+<script>
+  const target = "https://lbenitez.dev/posts/";
+  const hash = window.location.hash || "";
+  window.location.replace(target + hash);
+</script>
+<noscript>
+  <meta http-equiv="refresh" content="0; url=https://lbenitez.dev/posts/">
+</noscript>
+<p><a href="https://lbenitez.dev/posts/">Click here</a> to be redirected.</p>
