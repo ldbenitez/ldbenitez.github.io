@@ -33,7 +33,7 @@ render_emoji = true
 [extra]
 close_responsive_menu_on_resize = true
 favicon_emoji = "👨‍💻"
-header_title = "lbenitez.dev/thoughts"
+header_title = "Leonardo Benítez"
 layout = "center"
 show_default_author = false
 
