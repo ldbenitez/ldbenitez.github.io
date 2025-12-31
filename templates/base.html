@@ -12,14 +12,6 @@
     <title>{%- block title -%}{{ config.title }}{%- endblock -%}</title>
 
     <link rel="stylesheet" href="{{ get_url(path="css/style.css", cachebust=true) }}">
-    <link id="syntax-theme" rel="stylesheet" href="{{ get_url(path="syntax-dark.css", cachebust=true) }}">
-    <script>
-      (function() {
-        var theme = localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        var link = document.getElementById('syntax-theme');
-        if (link) link.href = link.href.replace(/syntax-(dark|light)\.css/, 'syntax-' + theme + '.css');
-      })();
-    </script>
     {%- if page.extra.stylesheets or section.extra.stylesheets %}
     {%- for stylesheet in page.extra.stylesheets | default(value=section.extra.stylesheets) %}
     <link rel="stylesheet" href="{{ get_url(path=stylesheet, cachebust=true) }}">

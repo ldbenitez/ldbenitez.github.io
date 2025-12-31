@@ -1,76 +1,79 @@
-// Theme colors - override theme's defaults
+@use 'variables' as *;
+
+// Theme colors - override theme's defaults using CSS custom properties
 :root:has(body[data-theme="dark"]) {
-    --background-color: #1a1714;
-    --text-color: #e8e0d4;
-    --accent-color: #f77f00;
-    --footnote-color: color-mix(in srgb, var(--text-color) 55%, transparent);
-    --code-border: color-mix(in srgb, var(--accent-color) 25%, transparent);
+  --background-color: #{theme-color(dark, background)};
+  --text-color: #{theme-color(dark, text)};
+  --accent-color: #{theme-color(dark, accent)};
+  --footnote-color: color-mix(in srgb, var(--text-color) 55%, transparent);
+  --code-border: color-mix(in srgb, var(--accent-color) 25%, transparent);
 }
 
 :root:has(body[data-theme="light"]) {
-    --background-color: #faf6f0;
-    --text-color: #332e2a;
-    --accent-color: #e06c00;
-    --footnote-color: color-mix(in srgb, var(--text-color) 65%, transparent);
-    --code-border: color-mix(in srgb, var(--accent-color) 20%, transparent);
+  --background-color: #{theme-color(light, background)};
+  --text-color: #{theme-color(light, text)};
+  --accent-color: #{theme-color(light, accent)};
+  --footnote-color: color-mix(in srgb, var(--text-color) 65%, transparent);
+  --code-border: color-mix(in srgb, var(--accent-color) 20%, transparent);
 }
 
 // Text selection style
 ::selection {
-    background: var(--accent-color);
-    color: var(--background-color);
+  background: var(--accent-color);
+  color: var(--background-color);
 }
 
+// Theme toggle button
 .theme-toggle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  background: transparent;
+  color: var(--accent-color);
+  border: none;
+  padding: $spacing-sm $spacing-sm + 2;
+  margin: 0;
+  cursor: pointer;
+  line-height: 1;
+  border-radius: $radius-sm;
+
+  svg {
+    display: block;
     vertical-align: middle;
-    background: transparent;
-    color: var(--accent-color);
-    border: none;
-    padding: 6px 10px;
-    margin: 0;
-    cursor: pointer;
-    line-height: 1;
-    border-radius: 4px;
+  }
 
-    svg {
-        display: block;
-        vertical-align: middle;
-    }
+  &:hover {
+    background: color-mix(in srgb, var(--accent-color) 15%, transparent);
+  }
 
-    &:hover {
-        background: color-mix(in srgb, var(--accent-color) 15%, transparent);
-    }
-
-    &:focus-visible {
-        outline: 1px solid var(--accent-color);
-        outline-offset: 2px;
-    }
+  &:focus-visible {
+    outline: 1px solid var(--accent-color);
+    outline-offset: 2px;
+  }
 }
 
 // Remove dotted border from post titles
 .post-title {
-    padding-bottom: 0;
-    border-bottom: none;
+  padding-bottom: 0;
+  border-bottom: none;
 
-    &::after {
-        display: none;
-    }
+  &::after {
+    display: none;
+  }
 }
 
 // Menu item styles
 .main-menu-items {
-    gap: 5px;
+  gap: $spacing-xs + 1;
 
-    a {
-        padding: 4px 8px;
-        border-radius: 4px;
-        transition: background 0.15s ease;
+  a {
+    padding: $spacing-xs $spacing-sm;
+    border-radius: $radius-sm;
+    transition: background 0.15s ease;
 
-        &:hover {
-            background: color-mix(in srgb, var(--accent-color) 15%, transparent);
-        }
+    &:hover {
+      background: color-mix(in srgb, var(--accent-color) 15%, transparent);
     }
+  }
 }

@@ -1,0 +1,53 @@
+// Shared variables for the site
+
+// Typography
+$font-mono: 'Geist Mono', Monaco, Consolas, 'Ubuntu Mono', monospace;
+
+// Theme color maps
+$themes: (
+  dark: (
+    background: #1a1714,
+    text: #e8e0d4,
+    accent: #f77f00,
+    // Syntax highlighting
+    code-bg: #141110,
+    comment: #8a8279,
+    string: #a6b07a,
+    number: #d4a76a,
+    function: #f0e6d8,
+    type: #d99a5e,
+    punctuation: #c4baaa,
+    error: #c47a7a,
+  ),
+  light: (
+    background: #faf6f0,
+    text: #332e2a,
+    accent: #e06c00,
+    // Syntax highlighting
+    code-bg: #f0ebe3,
+    comment: #8a847c,
+    string: #5a7040,
+    number: #9a6830,
+    function: #1a1714,
+    type: #b05a00,
+    punctuation: #5a554e,
+    error: #a04040,
+  ),
+);
+
+// Helper function to get theme color
+@function theme-color($theme, $key) {
+  @return map-get(map-get($themes, $theme), $key);
+}
+
+// Spacing
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+
+// Border radius
+$radius-sm: 4px;
+
+// Breakpoints
+$breakpoint-tablet: 685px;

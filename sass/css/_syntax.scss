@@ -1,0 +1,160 @@
+@use 'variables' as *;
+
+// Syntax highlighting for code blocks
+// Uses theme-aware colors via data-theme selector
+
+@mixin syntax-theme($theme) {
+  .z-code {
+    color: theme-color($theme, text);
+    background-color: theme-color($theme, code-bg);
+  }
+
+  // Comments
+  .z-comment,
+  .z-punctuation.z-definition.z-comment {
+    color: theme-color($theme, comment);
+    font-style: italic;
+  }
+
+  // Keywords, storage, operators
+  .z-keyword,
+  .z-storage {
+    color: theme-color($theme, accent);
+
+    &.z-operator,
+    &.z-type,
+    &.z-modifier {
+      color: theme-color($theme, accent);
+    }
+  }
+
+  // Strings
+  .z-string,
+  .z-constant.z-other.z-symbol {
+    color: theme-color($theme, string);
+
+    &.z-quoted {
+      color: theme-color($theme, string);
+    }
+  }
+
+  // Numbers and constants
+  .z-constant {
+    &.z-numeric,
+    &.z-language,
+    &.z-character {
+      color: theme-color($theme, number);
+    }
+
+    &.z-character.z-escape {
+      color: theme-color($theme, number);
+    }
+  }
+
+  // Functions
+  .z-entity.z-name.z-function,
+  .z-variable.z-function,
+  .z-support.z-function,
+  .z-support.z-macro {
+    color: theme-color($theme, function);
+  }
+
+  // Types, classes, tags
+  .z-entity.z-name {
+    color: theme-color($theme, type);
+
+    &.z-tag,
+    &.z-type,
+    &.z-class {
+      color: theme-color($theme, type);
+    }
+  }
+
+  .z-support.z-type,
+  .z-support.z-class {
+    color: theme-color($theme, type);
+  }
+
+  // Variables and properties
+  .z-variable,
+  .z-entity.z-other.z-attribute-name {
+    color: theme-color($theme, text);
+
+    &.z-parameter,
+    &.z-member,
+    &.z-language {
+      color: theme-color($theme, text);
+    }
+  }
+
+  // Punctuation
+  .z-punctuation {
+    color: theme-color($theme, punctuation);
+  }
+
+  // Regex
+  .z-string.z-regexp {
+    color: theme-color($theme, number);
+  }
+
+  // Markup
+  .z-markup {
+    &.z-heading {
+      color: theme-color($theme, accent);
+      font-weight: bold;
+    }
+
+    &.z-bold {
+      font-weight: bold;
+    }
+
+    &.z-italic {
+      font-style: italic;
+    }
+
+    &.z-underline.z-link {
+      color: theme-color($theme, type);
+      text-decoration: underline;
+    }
+
+    &.z-raw {
+      color: theme-color($theme, string);
+    }
+
+    &.z-inserted {
+      color: theme-color($theme, string);
+    }
+
+    &.z-deleted {
+      color: theme-color($theme, error);
+    }
+
+    &.z-changed {
+      color: theme-color($theme, number);
+    }
+  }
+
+  .z-string.z-other.z-link {
+    color: theme-color($theme, type);
+    text-decoration: underline;
+  }
+
+  // Invalid
+  .z-invalid {
+    color: theme-color($theme, error);
+
+    &.z-deprecated {
+      color: theme-color($theme, background);
+      background-color: theme-color($theme, type);
+    }
+  }
+}
+
+// Apply themes
+body[data-theme="dark"] {
+  @include syntax-theme(dark);
+}
+
+body[data-theme="light"] {
+  @include syntax-theme(light);
+}

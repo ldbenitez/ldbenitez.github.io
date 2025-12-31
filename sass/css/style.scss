@@ -2,7 +2,7 @@
 //
 // Load order:
 // 1. Theme base styles (from terminus theme)
-// 2. Local overrides (fonts, colors, header layout)
+// 2. Local overrides (fonts, colors, header layout, syntax)
 //
 // To add new overrides, create a new partial in sass/css/
 // and @use it at the bottom of this file.
@@ -24,3 +24,4 @@
 @use 'fonts';
 @use 'overrides';
 @use 'header';
+@use 'syntax';

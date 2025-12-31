@@ -1,65 +1,67 @@
+@use 'variables' as *;
+
 .header {
-    display: flex;
-    flex-direction: row;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: $spacing-lg - 4;
 }
 
 .header-container {
-    display: flex;
-    align-items: baseline;
+  display: flex;
+  align-items: baseline;
 }
 
 .header-logo-container {
-    display: flex;
-    flex-shrink: 0;
+  display: flex;
+  flex-shrink: 0;
 
-    // Remove vertical lines from theme
-    &::after {
-        display: none;
-    }
+  // Remove vertical lines from theme
+  &::after {
+    display: none;
+  }
 
-    a {
-        flex: 0 0 auto;
-        max-width: 100%;
-        text-decoration: none;
-    }
+  a {
+    flex: 0 0 auto;
+    max-width: 100%;
+    text-decoration: none;
+  }
 }
 
 .logo {
-    display: flex;
-    align-items: center;
-    padding: 0;
-    margin: 0;
-    background: transparent;
-    color: var(--accent-color);
-    font-weight: bold;
-    font-size: 1.5rem;
-    text-decoration: none;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  color: var(--accent-color);
+  font-weight: bold;
+  font-size: 1.5rem;
+  text-decoration: none;
 }
 
 // Override menu styles for horizontal layout
 .main-menu {
-    display: flex;
-    align-items: baseline;
-    margin: 0;
-    
-    &-items {
-        align-items: baseline;
-        padding-bottom: 0;
-        width: auto;
-        margin: 0;
+  display: flex;
+  align-items: baseline;
+  margin: 0;
 
-        // Keep responsive behavior from theme
-        @media (min-width: 685px) {
-            display: flex;
-        }
+  &-items {
+    align-items: baseline;
+    padding-bottom: 0;
+    width: auto;
+    margin: 0;
+
+    // Keep responsive behavior from theme
+    @media (min-width: $breakpoint-tablet) {
+      display: flex;
     }
+  }
 }
 
 @media print {
-    .header {
-        display: none;
-    }
+  .header {
+    display: none;
+  }
 }
