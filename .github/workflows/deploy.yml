@@ -25,6 +25,9 @@ jobs:
           BUILD_ONLY: true
           BUILD_THEMES: false
 
+      - name: restore build output ownership
+        run: sudo chown -R "$(id -u):$(id -g)" public
+
       - name: optimize assets
         run: bash scripts/optimize.sh public
 
