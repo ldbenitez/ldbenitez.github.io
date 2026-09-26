@@ -1,6 +1,16 @@
 @use 'variables' as *;
 
 // Theme colors - override theme's defaults using CSS custom properties
+// Resolve the color-scheme per theme so that Giallo's dual-theme code
+// highlighting (inline light-dark()) follows the dark/light toggle.
+body[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+body[data-theme="light"] {
+  color-scheme: light;
+}
+
 :root:has(body[data-theme="dark"]) {
   --background-color: #{theme-color(dark, background)};
   --text-color: #{theme-color(dark, text)};

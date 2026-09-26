@@ -21,15 +21,17 @@ taxonomies = [
 build_search_index = false
 
 [markdown]
-# Whether to do syntax highlighting
-highlight_code = true
-
-# Use CSS classes for syntax highlighting (enables theme switching)
-highlight_theme = "css"
-
 # When set to "true", emoji aliases translated to their corresponding
 # Unicode emoji equivalent in the rendered Markdown files. (e.g.: :smile: => 😄)
 render_emoji = true
+
+# Syntax highlighting (Giallo, VSCode themes). Dual themes follow the site's
+# dark/light toggle via the CSS light-dark() function and color-scheme.
+[markdown.highlighting]
+style = "inline"
+light_theme = "gruvbox-light-medium"
+dark_theme = "gruvbox-dark-medium"
+add_color_scheme = false
 
 [extra]
 close_responsive_menu_on_resize = true

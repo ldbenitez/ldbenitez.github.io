@@ -1,52 +1,42 @@
 # AGENTS.md — lbenitez.dev
 
-Zola static site; custom templates/styles layered over the Terminus theme (git submodule).
+Zola site with local templates and Sass layered over the Terminus git submodule.
+Use Zola 0.22.1, matching `.github/workflows/deploy.yml`. The current theme
+templates use macro syntax that Zola 0.23 cannot parse.
 
-## Toolchain constraint (read first)
-
-- This site builds with **Zola 0.21.x only**. Zola ≥0.22 cannot build it as-is: Tera 2 removed the macro syntax the Terminus templates use (`post_macros::header(...)` fails to parse), and `[markdown]` config keys changed (`highlight_code`/`highlight_theme` → `[markdown.highlighting]`, Syntect → Giallo).
-- Homebrew's `zola` is 0.23.x — do not use it. A 0.21.0 binary lives at `~/.local/bin/zola`; make sure it resolves before brew's in PATH. (Fresh machines: grab the 0.21.0 release from getzola/zola GitHub releases.)
-- The deploy workflow downloads the Zola 0.21.0 Linux release directly (`.github/workflows/deploy.yml`). Local and CI versions must match or deploys break.
-- Upgrading to 0.23 means a real migration (templates → Tera 2 components, highlighting config, workflow bump) — not a version bump.
-
-## Commands
+## Verify
 
 ```bash
-zola serve                      # dev server
-zola check                      # validate content, templates, links
-zola build                      # build into public/ (gitignored)
-bash scripts/optimize.sh         # post-build: prune unreferenced theme assets, minify custom JS (esbuild, best-effort)
-python3 tests/site_smoke.py      # full verification: check + build, then asserts routes, key text, section feeds
+zola check
+python3 tests/site_smoke.py
+node --test tests/cosmos-*.test.mjs
+bash scripts/optimize.sh
 ```
 
-Run `tests/site_smoke.py` after any config, template, or content-structure change. It shells out to `zola` from PATH, so the 0.21 binary must resolve first. Run `scripts/optimize.sh` only to inspect the optimized output; it is destructive to `public/` and CI reruns it from a clean build.
+`site_smoke.py` runs a fresh build and checks routes, content, feeds, and Cosmos
+wiring. Run it after config, template, or content-structure changes. The optimizer
+modifies the generated `public/` directory; run it after a build to verify the
+deployed asset set.
 
 ## Architecture
 
-- Site templates in `templates/` override same-named Terminus templates; partials resolve site-first. Never edit anything inside `themes/terminus` (submodule, pinned commit).
-- Listing behavior branches on `section.extra.stream_type` (`notes` / `links`) in `templates/section.html`; individual-page behavior branches on `page.extra.content_type` (`link`) in `templates/page.html`.
-- Feeds are per-section: `generate_feeds = true` in a section's `_index.md` produces `<section>/atom.xml`. There is no site-wide feed.
-- Sass load order in `sass/css/style.scss`: theme first, then local partials (fonts → overrides → header → syntax → streams). New listing styles go in `sass/css/_streams.scss`.
-- Dark/light palettes are Sass maps in `sass/css/_variables.scss`, applied via the `theme-color()` helper in `_overrides.scss`. Change colors in the maps, not ad-hoc hex values. `static/js/theme-toggle.js` has a `COLORS` map that must match the palette backgrounds.
-- Content model (front matter per section type) is documented in `README.md`. Note: a Link page without `extra.target_url` fails the build (template reads it directly).
-- `scripts/optimize_public.py` prunes fonts/images (and two unused theme JS/CSS files) that the built HTML/CSS never reference, because Zola copies the theme's whole `static/` tree. It reads references from `public/**` — if you add a dynamically-injected `<img src>` that no static scan can see, whitelist it there rather than in the theme.
+- `templates/` overrides matching theme templates. Keep site changes outside
+  `themes/terminus/`, which is a pinned submodule.
+- `section.extra.stream_type` selects Notes or Links listings in
+  `templates/section.html`; `page.extra.content_type` selects Link pages in
+  `templates/page.html`. Content front matter is described in `README.md`.
+- Each content section generates its own Atom feed. There is no site-wide feed.
+- `sass/css/style.scss` loads the theme first, then local partials. Theme palettes
+  live in `_variables.scss`; `static/js/theme-toggle.js` keeps matching background
+  colors for the browser UI.
+- `scripts/optimize_public.py` removes unreferenced theme assets from `public/`.
+  If an asset is referenced only at runtime, add a retention rule there.
+- `public/` is generated and gitignored. CI builds, optimizes, and publishes it
+  to `gh-pages` on pushes to `main`.
 
-## Deployment
+## Template notes
 
-- Push to `main` → `.github/workflows/deploy.yml` rebuilds from source **in CI** with Zola 0.21.0 (submodules checked out), runs `scripts/optimize.sh`, and publishes `public/` to `gh-pages`. GitHub Pages serves the `gh-pages` branch.
-- `public/` is gitignored: local build output never reaches Pages. Building locally is for preview only.
-
-## Tera/Zola gotchas (0.21)
-
-- Accessing a missing `extra` key in a template errors at build time. Use `| default(value="")` for optional keys, e.g. `page.extra.content_type | default(value="")`.
-- Internal Markdown links use `@/` paths: `[Posts](@/posts/_index.md)`.
-- Zola escapes `/` in rendered attributes as `&#x2F;` — plain-text greps for URLs in built HTML will miss.
-- Listing order is made explicit in templates with `| sort(attribute="date") | reverse` (newest first); don't rely on Zola's default page order.
-
-## Local environment quirks
-
-- The checkout directory name ends with a space (`Writtings `). Construct paths from the session's working directory, not from memory.
-
-## Reference
-
-- `docs/superpowers/specs/2026-09-25-personal-blog-design.md` — approved design spec (IA, visual direction, constraints); `docs/superpowers/plans/…-personal-blog-redesign.md` — the implementation plan that produced the current site.
+- Missing `extra` keys cause build errors; use `| default(value="")` for
+  optional keys.
+- Internal Markdown links use `@/` paths.
+- Templates explicitly sort dated entries newest first.
