@@ -1,7 +1,7 @@
 # Gravity Playground — Design Specification
 
 **Date:** 2026-09-25  
-**Status:** Experience and technical design approved in conversation; written specification awaiting review.
+**Status:** User-approved written specification; ready for implementation planning.
 
 ## Purpose
 
