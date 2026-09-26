@@ -1,0 +1,14 @@
+<article class="post-row">
+    <time datetime="{{ page.date }}">{{ page.date | date(format="%Y.%m.%d") }}</time>
+    <div>
+        <a class="post-row-title" href="{{ page.permalink | safe }}">{{ page.title }}</a>
+        {%- if page.description %}
+        <p class="post-row-summary">{{ page.description }}</p>
+        {%- elif page.summary %}
+        <p class="post-row-summary">{{ page.summary | striptags | trim | truncate(length=140, end="…") }}</p>
+        {%- endif %}
+        {%- if page.taxonomies and page.taxonomies.tags %}
+        <p class="post-row-tags">#{{ page.taxonomies.tags | join(sep=" #") }}</p>
+        {%- endif %}
+    </div>
+</article>

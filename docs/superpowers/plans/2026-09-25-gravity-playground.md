@@ -4,7 +4,7 @@
 
 **Source:** [Approved design specification](../specs/2026-09-25-gravity-playground-design.md)
 
-**Status:** Ready for implementation; task checkboxes record implementation progress.
+**Status:** Implemented. Automated tests and site checks pass; remaining manual browser checks are recorded below.
 
 ## Outcome
 
@@ -166,4 +166,17 @@ Start the local site with `rtk proxy "$HOME/.local/bin/zola" serve --interface 1
 - Dependencies: physics precedes the view; view contracts precede shell integration; full browser checks follow template wiring. Each task has named files through the file map, concrete actions, and an observable completion condition.
 - Scope: no new framework, build pipeline, mutual gravity, persistence, audio, or deployment change. Verification uses the existing site checks and focused numerical tests.
 - Workspace safety: implementation starts from the current dirty workspace and isolates feature changes during any later commit.
-- This plan was reviewed for completeness and consistency. Implementation and its test runs have not been performed as part of writing this document.
+- This plan was reviewed for completeness and consistency. Implementation results and remaining browser checks are recorded below.
+
+## Implementation results — 2026-09-26
+
+- Implemented the physics, Canvas playground, phrase trigger, accessible prompt/dialog, theme colors, templates, responsive styles, smoke-check coverage, and README instructions listed in this plan.
+- `node --test tests/cosmos-physics.test.mjs`: **10 passed**. All three circular-orbit cases remain within 1% radius and energy drift for ten periods.
+- `node --check` passed for all three JavaScript modules.
+- `python3 tests/site_smoke.py` with Zola 0.21.0: **passed**; five routes, three feeds, and playground wiring across six shared pages. A network-enabled check was used because this existing site check fetches the external GitHub profile link.
+- `git diff --check`: passed.
+- Browser checks covered lazy loading, phrase filtering in editable inputs, invalid and valid prompt entries, modal appearance, mobile layout at 390 × 844, keyboard launch, pause/reset, Escape cancellation/close, focus restoration, dark/light rendering, and cleanup of dialogs and scroll-lock styles after repeated opens. Browser checks interrupted by user activity were not repeated against the user's active browser.
+- Still unverified in a browser: physical pointer/touch drags and pointer-capture cancellation, reduced-motion preference changes, hidden-tab pause/resume, 844 × 390 layout, close while a deliberately throttled import is pending, injected import/Canvas/runtime failures, and live animation-frame/listener/memory measurements.
+- The implementation is not committed. The checkout already contained unrelated, uncommitted site-redesign files; those changes were preserved.
+
+The remaining manual browser items do not invalidate the passing deterministic physics tests or generated-site checks, but should be exercised before treating the playground as fully browser-verified.

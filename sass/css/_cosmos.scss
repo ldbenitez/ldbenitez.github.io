@@ -1,0 +1,128 @@
+@use 'variables' as *;
+
+$cosmos-colors: (star, highlight, shadow, planet, secondary, muted, guide, grid, ocean, rust, ice, nebula, void, hot, ember, radiance);
+
+@each $mode in (dark, light) {
+  body[data-theme='#{$mode}'] .cosmos-dialog {
+    --cosmos-background: #{theme-color($mode, background)};
+    --cosmos-text: #{theme-color($mode, text)};
+    @each $color in $cosmos-colors {
+      --cosmos-#{$color}: #{theme-color($mode, 'cosmos-' + $color)};
+    }
+  }
+}
+
+// Give this scene a black stage and readable controls in either site theme.
+body[data-theme] .cosmos-dialog[data-view='blackhole'] {
+  --cosmos-background: #{theme-color(dark, cosmos-void)};
+  --cosmos-text: #{theme-color(dark, text)};
+  @each $color in $cosmos-colors {
+    --cosmos-#{$color}: #{theme-color(dark, 'cosmos-' + $color)};
+  }
+}
+
+.cosmos-launcher {
+  font: inherit;
+  color: var(--footnote-color);
+  background: transparent;
+  border: 0;
+  padding: 10px 14px;
+  cursor: pointer;
+  margin-top: 8px;
+  min-height: 44px;
+  &:hover { color: var(--accent-color); }
+  &:focus-visible { outline: 2px solid var(--accent-color); outline-offset: 3px; }
+  &[hidden] { display: none; }
+}
+
+.cosmos-dialog {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
+  height: 100vh;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: max(20px, env(safe-area-inset-top)) max(28px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(28px, env(safe-area-inset-left));
+  border: 0;
+  background: var(--cosmos-background);
+  color: var(--cosmos-text);
+  font-family: $font-mono;
+  overflow: auto;
+  &[open] { display: flex; flex-direction: column; }
+  &::backdrop { background: var(--background-color); opacity: 0.8; }
+  *, *::before, *::after { box-sizing: border-box; }
+  p { margin: 0; }
+  button, input, select { font: inherit; }
+  [hidden] { display: none !important; }
+  select { color: var(--cosmos-text); background: var(--cosmos-background); border: 1px solid var(--cosmos-guide); border-radius: 4px; padding: 8px; min-height: 44px; }
+  .cosmos-views { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 14px; font-size: 12px; }
+  .cosmos-views [aria-pressed='true'] { color: var(--cosmos-star); border-color: var(--cosmos-star); }
+  .cosmos-atlas-info { display: flex; align-items: center; gap: 16px; padding: 12px 0; min-height: 78px; font-size: 12px; }
+  .cosmos-atlas-info label { white-space: nowrap; }
+  .cosmos-fact { max-width: 75ch; color: var(--cosmos-muted); line-height: 1.6; }
+  .cosmos-speed { display: flex; align-items: center; gap: 8px; }
+  button {
+    color: var(--cosmos-text);
+    background: transparent;
+    border: 1px solid var(--cosmos-guide);
+    border-radius: 4px;
+    padding: 9px 13px;
+    min-height: 44px;
+    cursor: pointer;
+    line-height: 1.3;
+    &:hover { border-color: var(--cosmos-star); color: var(--cosmos-star); }
+  }
+  :focus-visible { outline: 2px solid var(--cosmos-star); outline-offset: 3px; }
+  .cosmos-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex: 0 0 auto;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--cosmos-grid);
+    h2 { margin: 3px 0 0; font-size: 16px; line-height: 1.5; font-weight: 500; }
+    .cosmos-prompt-label { color: var(--cosmos-star); font-size: 12px; }
+  }
+  .cosmos-close { white-space: nowrap; border-color: transparent; font-size: 12px; }
+  .cosmos-close span { color: var(--cosmos-muted); margin-left: 6px; }
+  .cosmos-content { flex: 1; min-height: 220px; display: flex; flex-direction: column; }
+  .cosmos-stage { position: relative; flex: 1; min-height: 140px; }
+  .cosmos-canvas { display: block; position: absolute; width: 100%; height: 100%; touch-action: none; }
+  .cosmos-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-top: 12px; border-top: 1px solid var(--cosmos-grid); }
+  .cosmos-actions { display: flex; flex-wrap: wrap; gap: 8px; font-size: 12px; }
+  .cosmos-summary { font-size: 12px; color: var(--cosmos-muted); }
+  .cosmos-help { font-size: 12px; color: var(--cosmos-muted); margin-top: 12px; line-height: 1.6; min-height: 2em; }
+  .cosmos-message { margin: auto; padding: 32px; max-width: 50ch; line-height: 1.7; }
+  .cosmos-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+}
+
+.cosmos-dialog.cosmos-prompt {
+  width: min(480px, calc(100% - 32px));
+  height: auto;
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  padding: 24px;
+  border: 1px solid var(--cosmos-guide);
+  border-radius: 6px;
+  .cosmos-content { min-height: 0; }
+  .cosmos-command-form { margin-top: 20px; }
+  label { display: block; margin-bottom: 10px; font-size: 13px; }
+  .cosmos-command-row { display: flex; gap: 8px; }
+  input { width: 100%; min-width: 0; color: var(--cosmos-text); background: var(--cosmos-background); border: 1px solid var(--cosmos-guide); padding: 10px; border-radius: 4px; font-size: 16px; }
+  #cosmos-command-error { margin-top: 12px; min-height: 1.5em; color: var(--cosmos-star); font-size: 13px; }
+}
+
+@media (max-width: 600px), (max-height: 500px) {
+  .cosmos-dialog {
+    padding: max(12px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+    .cosmos-heading { padding-bottom: 8px; }
+    .cosmos-heading h2 { font-size: 14px; }
+    .cosmos-close span { display: none; }
+    .cosmos-help { font-size: 11px; margin-top: 8px; }
+    .cosmos-atlas-info { align-items: flex-start; flex-direction: column; gap: 8px; font-size: 11px; min-height: 116px; }
+    .cosmos-views { gap: 6px; padding-top: 10px; }
+    .cosmos-toolbar { gap: 8px; padding-top: 8px; }
+  }
+}

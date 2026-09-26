@@ -1,0 +1,21 @@
+<article class="link-entry">
+    <time datetime="{{ page.date }}">{{ page.date | date(format="%Y.%m.%d") }}</time>
+    <div>
+        <a class="link-entry-title" href="{{ page.extra.target_url }}">{{ page.title }}</a>
+        {%- set commentary = page.extra.commentary | default(value="") -%}
+        {%- if commentary %}
+        <p class="link-commentary">{{ commentary }}</p>
+        {%- endif %}
+        {%- if page.content %}
+        <div class="link-body">
+            {{ page.content | safe }}
+        </div>
+        {%- endif %}
+        <p class="link-entry-meta">
+            {%- if page.taxonomies and page.taxonomies.tags %}
+            <span class="post-row-tags">#{{ page.taxonomies.tags | join(sep=" #") }}</span>
+            {%- endif %}
+            <a class="link-permalink" href="{{ page.permalink | safe }}" aria-label="Permalink to recommendation from {{ page.date }}">permalink</a>
+        </p>
+    </div>
+</article>

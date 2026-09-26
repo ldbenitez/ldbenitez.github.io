@@ -9,12 +9,16 @@
 <h1>{{ section.title }}</h1>
 <p>All {{ posts.pages | length }} posts</p>
 
+{%- if posts.pages | length > 0 %}
 <ul class="archive-list">
-{%- for post in posts.pages %}
+    {%- for post in posts.pages | sort(attribute="date") | reverse %}
     <li>
         <time datetime="{{ post.date }}">{{ post.date | date(format="%Y.%m.%d") }}</time>
         <a href="{{ post.permalink | safe }}">{{ post.title }}</a>
     </li>
-{%- endfor %}
+    {%- endfor %}
 </ul>
+{%- else %}
+<p class="empty-state">No posts yet. Once something is published, it will appear here.</p>
+{%- endif %}
 {%- endblock -%}

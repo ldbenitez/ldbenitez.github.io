@@ -3,6 +3,7 @@ base_url = "https://lbenitez.dev"
 
 # The site title and description; used in feeds by default.
 title = "lbenitez.dev"
+description = "A personal notebook on software, learning, and the things worth remembering."
 author = "Leonardo Benítez"
 
 # The site theme to use
@@ -33,14 +34,15 @@ render_emoji = true
 [extra]
 close_responsive_menu_on_resize = true
 favicon_emoji = "👨‍💻"
-header_title = "Leonardo Benítez"
+header_title = "leonardo.md"
 layout = "center"
 show_default_author = false
 
 main_menu = [
-    { name = "posts", url = "posts", trailing_slash = true },
-    { name = "tags", url = "tags", trailing_slash = true },
-    { name = "archive", url = "archive", trailing_slash = true },
+    { name = "Posts", url = "posts", trailing_slash = true },
+    { name = "Notes", url = "notes", trailing_slash = true },
+    { name = "Links", url = "links", trailing_slash = true },
+    { name = "About", url = "about", trailing_slash = true },
 ]
 
 socials = [

@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{%- block title -%}
+{{ section.title }} | {{ config.title }}
+{%- endblock -%}
+
+{%- block description -%}
+    {%- if section.description %}
+    <meta name="description" content="{{ section.description | markdown(inline=true) | striptags | safe }}">
+    {%- elif config.description %}
+    <meta name="description" content="{{ config.description | safe }}">
+    {%- endif %}
+{%- endblock -%}
+
+{%- block main -%}
+<header class="home-intro">
+    <h1>{{ section.title }}</h1>
+    {%- if section.description %}
+    <p>{{ section.description }}</p>
+    {%- endif %}
+</header>
+
+{%- set stream_type = section.extra.stream_type | default(value="") -%}
+{%- if stream_type == "notes" %}
+{%- set notes = section.pages | sort(attribute="date") | reverse %}
+<section class="stream-list" aria-label="Notes">
+    {%- if notes | length > 0 %}
+    {%- for page in notes %}
+    {% include "partials/note-entry.html" %}
+    {%- endfor %}
+    {%- else %}
+    <p class="empty-state">No notes yet. Short thoughts will show up here.</p>
+    {%- endif %}
+</section>
+<p class="stream-feed"><a href="{{ section.permalink | safe }}atom.xml">Notes Atom feed</a></p>
+{%- elif stream_type == "links" %}
+{%- set links = section.pages | sort(attribute="date") | reverse %}
+<section class="stream-list" aria-label="Links">
+    {%- if links | length > 0 %}
+    {%- for page in links %}
+    {% include "partials/link-entry.html" %}
+    {%- endfor %}
+    {%- else %}
+    <p class="empty-state">No links yet. Things worth reading will show up here.</p>
+    {%- endif %}
+</section>
+<p class="stream-feed"><a href="{{ section.permalink | safe }}atom.xml">Links Atom feed</a></p>
+{%- else %}
+{%- set pages = paginator.pages | default(value=section.pages) %}
+<section class="stream-list" aria-label="Posts">
+    {%- if pages | length > 0 %}
+    {%- for page in pages %}
+    {% include "partials/post-row.html" %}
+    {%- endfor %}
+    {%- else %}
+    <p class="empty-state">No posts yet.</p>
+    {%- endif %}
+</section>
+
+{%- if paginator and paginator.number_pagers > 1 %}
+<nav class="pagination">
+    <ul>
+        {%- if paginator.previous %}
+        <li><a rel="prev" href="{{ paginator.previous | safe }}" aria-label="newer posts">&lt;&nbsp;[newer posts]</a></li>
+        {%- endif %}
+        {%- if paginator.next %}
+        <li><a rel="next" href="{{ paginator.next | safe }}" aria-label="older posts">[older posts]&nbsp;&gt;</a></li>
+        {%- endif %}
+    </ul>
+</nav>
+{%- endif %}
+
+<p class="stream-feed"><a href="{{ section.permalink | safe }}atom.xml">Atom feed</a></p>
+{%- endif %}
+{%- endblock -%}

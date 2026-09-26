@@ -1,0 +1,9 @@
+<article class="note-entry">
+    <div class="note-meta">
+        <time datetime="{{ page.date }}">{{ page.date | date(format="%Y.%m.%d") }}</time>
+        <a class="note-permalink" href="{{ page.permalink | safe }}" aria-label="Permalink to note from {{ page.date }}">#</a>
+    </div>
+    <div class="note-body">
+        {{ page.content | safe }}
+    </div>
+</article>

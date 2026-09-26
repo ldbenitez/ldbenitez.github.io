@@ -39,6 +39,7 @@
     <script src="{{ get_url(path="js/theme-switcher.js", cachebust=true) }}" defer></script>
     {%- endif %}
     <script src="{{ get_url(path="js/theme-toggle.js", cachebust=true) }}" defer></script>
+    <script src="{{ get_url(path="js/cosmos-trigger.js", cachebust=true) }}" defer></script>
     {%- if config_macros::get(setting="katex", default_global_value=false) == "true" %}
     <link rel="stylesheet" href="{{ get_url(path="css/katex.min.css", cachebust=true) }}">
     <script src="{{ get_url(path="js/katex.min.js", cachebust=true) }}" defer></script>
@@ -81,7 +82,15 @@
     {%- set page_title = config.title -%}
     <meta property="og:title" content="{{ page_title }}">
     {% elif current_path -%}
-    {%- set page_title = page.title | default(value=section.title | default(value=taxonomy.name | capitalize | default(value=config.title))) -%}
+    {%- if page.title %}
+    {%- set page_title = page.title -%}
+    {%- elif section.title %}
+    {%- set page_title = section.title -%}
+    {%- elif taxonomy and taxonomy.name %}
+    {%- set page_title = taxonomy.name | capitalize -%}
+    {%- else %}
+    {%- set page_title = config.title -%}
+    {%- endif %}
     <meta property="og:title" content="{{ page_title | replace(from='"', to="&quot;") | safe }}">
     {% endif -%}
 
@@ -162,6 +171,7 @@
         {% filter indent -%}{%- filter indent -%}
         {%- block footer -%}
         {% include "partials/footer.html" %}
+        {% include "partials/cosmos-launcher.html" %}
         {%- endblock -%}
         {%- endfilter -%}{%- endfilter %}
     </footer>

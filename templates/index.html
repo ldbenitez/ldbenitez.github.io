@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{%- block main -%}
+<header class="home-intro">
+    <p class="home-prompt">~/writing</p>
+    <h1>{{ section.title }}</h1>
+    {%- if section.description %}
+    <p>{{ section.description }}</p>
+    {%- endif %}
+</header>
+
+{%- set posts = get_section(path="posts/_index.md") -%}
+{%- set recent = posts.pages | sort(attribute="date") | reverse | slice(end=5) %}
+<section class="stream-list" aria-labelledby="recent-posts-heading">
+    <div class="stream-head">
+        <h2 id="recent-posts-heading">Recent posts</h2>
+        <a href="{{ posts.permalink | safe }}">All posts →</a>
+    </div>
+
+    {%- if recent | length > 0 %}
+    {%- for page in recent %}
+    {% include "partials/post-row.html" %}
+    {%- endfor %}
+    {%- else %}
+    <p class="empty-state">Nothing published yet. The first post is on its way.</p>
+    {%- endif %}
+</section>
+{%- endblock -%}

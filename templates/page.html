@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{%- block title -%}
+{%- if page.title %}{{ page.title }} | {% endif -%}
+{{ config.title }}
+{%- endblock -%}
+
+{%- block description -%}
+    {%- if page.description %}
+    <meta name="description" content="{{ page.description | markdown(inline=true) | striptags }}">
+    {%- elif config.description %}
+    <meta name="description" content="{{ config.description }}">
+    {%- endif %}
+{%- endblock -%}
+
+{%- block main -%}
+{%- set content_type = page.extra.content_type | default(value="") -%}
+{%- if content_type == "link" %}
+<article class="post content link-page">
+    <header>
+        <h1 class="post-title"><a href="{{ page.extra.target_url }}">{{ page.title }}</a></h1>
+        {%- if page.date %}
+        <ul class="post-meta hidden">
+            <li title="Published on {{ page.date }}">
+                <time datetime="{{ page.date }}">{{ page.date | date(format="%Y.%m.%d") }}</time>
+            </li>
+        </ul>
+        {%- endif %}
+        {%- if page.taxonomies and page.taxonomies.tags %}
+        <div class="post-tags">
+            {%- for tag in page.taxonomies.tags %}
+            {% set tag_url = get_taxonomy_url(kind="tags", name=tag, lang=page.lang) -%}
+            <span>#<a rel="tag" href="{{ tag_url | safe }}">{{ tag }}</a></span>
+            {%- endfor %}
+        </div>
+        {%- endif %}
+    </header>
+
+    {%- set commentary = page.extra.commentary | default(value="") -%}
+    {%- if commentary %}
+    <p class="link-commentary">{{ commentary }}</p>
+    {%- endif %}
+    {%- if page.content %}
+    {{ page.content | safe }}
+    {%- endif %}
+
+    <p class="stream-feed">
+        <a href="{{ page.extra.target_url }}">Visit →</a>
+        <span aria-hidden="true" role="separator">::</span>
+        <a href="{{ page.permalink | safe }}">Permalink</a>
+    </p>
+</article>
+{%- else %}
+<article class="post content">
+    <header>
+        {%- if page.title %}
+        <h1 class="post-title">{{ page.title }}</h1>
+        {%- endif %}
+        {%- if page.date %}
+        <ul class="post-meta hidden">
+            <li title="Published on {{ page.date }}{%- if page.updated %}, last updated {{ page.updated }}{%- endif -%}">
+                <time datetime="{{ page.date }}">{{ page.date | date(format="%Y.%m.%d") }}</time>
+                {%- if page.updated %}&nbsp;[Updated: <time datetime="{{ page.updated }}">{{ page.updated | date(format="%Y.%m.%d") }}</time>]{%- endif %}
+            </li>
+        </ul>
+        {%- endif %}
+        {%- if page.taxonomies and page.taxonomies.tags %}
+        <div class="post-tags">
+            {%- for tag in page.taxonomies.tags %}
+            {% set tag_url = get_taxonomy_url(kind="tags", name=tag, lang=page.lang) -%}
+            <span>#<a rel="tag" href="{{ tag_url | safe }}">{{ tag }}</a></span>
+            {%- endfor %}
+        </div>
+        {%- endif %}
+    </header>
+
+    {{ page.content | safe }}
+</article>
+{%- endif %}
+
+{%- set is_stream_item = content_type == "note" or content_type == "link" %}
+{%- if (page.lower or page.higher) and not is_stream_item %}
+<nav class="post-navigation">
+    <header class="post-navigation-title">
+        <h2>Read More Posts</h2>
+        <hr>
+    </header>
+    <div class="post-navigation-buttons">
+        {%- if page.lower %}
+        <a rel="next" href="{{ page.lower.permalink | safe }}" aria-label="Next article">
+            <span aria-hidden="true">&lt;&nbsp;[</span>
+            {{- page.lower.title | truncate(value=100, end="…") -}}
+            <span aria-hidden="true">]</span>
+        </a>
+        {%- endif %}
+        {%- if page.lower and page.higher %}
+        <span aria-hidden="true" role="separator">::</span>
+        {%- endif %}
+        {%- if page.higher %}
+        <a rel="prev" href="{{ page.higher.permalink | safe }}" aria-label="Prev article">
+            <span aria-hidden="true">[</span>
+            {{- page.higher.title | truncate(value=100, end="…") -}}
+            <span aria-hidden="true">]&nbsp;&gt;</span>
+        </a>
+        {%- endif %}
+    </div>
+</nav>
+{%- endif %}
+{%- endblock -%}

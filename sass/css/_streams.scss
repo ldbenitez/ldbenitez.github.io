@@ -1,0 +1,182 @@
+@use 'variables' as *;
+
+// Homepage introduction
+.home-intro {
+  margin: 0 0 $spacing-lg;
+
+  .home-prompt {
+    margin: 0 0 $spacing-sm;
+    color: var(--accent-color);
+    font-size: 0.85rem;
+  }
+
+  h1 {
+    margin: 0 0 $spacing-sm;
+    letter-spacing: -0.03em;
+  }
+
+  p {
+    margin: 0;
+    max-width: 60ch;
+    color: color-mix(in srgb, var(--text-color) 72%, transparent);
+  }
+}
+
+// Shared listing header for content streams
+.stream-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: $spacing-md;
+  padding-bottom: $spacing-sm;
+  border-bottom: 2px solid var(--text-color);
+
+  h2 {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent-color);
+  }
+
+  a {
+    text-decoration: none;
+    font-size: 0.85rem;
+  }
+}
+
+// Post rows: date on the left, title and summary on the right
+.post-row {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: $spacing-md;
+  padding: $spacing-md 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+
+  time {
+    color: color-mix(in srgb, var(--text-color) 60%, transparent);
+    font-size: 0.85rem;
+  }
+
+  .post-row-title {
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  .post-row-summary {
+    margin: $spacing-xs 0 0;
+    font-size: 0.9rem;
+    color: color-mix(in srgb, var(--text-color) 72%, transparent);
+  }
+
+  .post-row-tags {
+    margin: $spacing-xs 0 0;
+    font-size: 0.8rem;
+    color: var(--accent-color);
+  }
+}
+
+.empty-state {
+  padding: $spacing-lg 0;
+  font-style: italic;
+  color: color-mix(in srgb, var(--text-color) 60%, transparent);
+}
+
+// Note entries: date and permalink on one line, body below
+.note-entry {
+  padding: $spacing-md 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+
+  .note-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+
+    time {
+      color: color-mix(in srgb, var(--text-color) 60%, transparent);
+      font-size: 0.85rem;
+    }
+
+    .note-permalink {
+      text-decoration: none;
+      font-weight: bold;
+    }
+  }
+
+  .note-body {
+    margin: $spacing-sm 0 0;
+
+    p {
+      margin: 0 0 $spacing-sm;
+
+      &:last-child {
+        margin: 0;
+      }
+    }
+  }
+}
+
+// Link entries: date on the left, title and commentary on the right
+.link-entry {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: $spacing-md;
+  padding: $spacing-md 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+
+  time {
+    color: color-mix(in srgb, var(--text-color) 60%, transparent);
+    font-size: 0.85rem;
+  }
+
+  .link-entry-title {
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  .link-commentary {
+    margin: $spacing-xs 0 0;
+    font-size: 0.9rem;
+    color: color-mix(in srgb, var(--text-color) 72%, transparent);
+  }
+
+  .link-body {
+    margin: $spacing-xs 0 0;
+    font-size: 0.9rem;
+  }
+
+  .link-entry-meta {
+    display: flex;
+    align-items: baseline;
+    gap: $spacing-md;
+    margin: $spacing-xs 0 0;
+    font-size: 0.8rem;
+
+    .link-permalink {
+      text-decoration: none;
+    }
+  }
+}
+
+// Individual recommendation page commentary
+.link-page .link-commentary {
+  color: color-mix(in srgb, var(--text-color) 72%, transparent);
+}
+
+.stream-feed {
+  margin: $spacing-md 0 0;
+  font-size: 0.85rem;
+
+  a {
+    text-decoration: none;
+  }
+}
+
+@media (max-width: $breakpoint-tablet) {
+  .post-row,
+  .link-entry {
+    grid-template-columns: 1fr;
+    gap: $spacing-xs;
+  }
+}
