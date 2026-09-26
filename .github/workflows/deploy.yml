@@ -19,14 +19,11 @@ jobs:
         with:
           node-version: "22"
 
-      - name: install zola 0.22.1
-        run: |
-          curl -sSfL "https://github.com/getzola/zola/releases/download/v0.22.1/zola-v0.22.1-x86_64-unknown-linux-gnu.tar.gz" | tar -xz
-          sudo mv zola /usr/local/bin/zola
-          zola --version
-
-      - name: zola build
-        run: zola build
+      - name: build with Zola 0.22.1
+        uses: shalzz/zola-deploy-action@v0.22.1
+        env:
+          BUILD_ONLY: true
+          BUILD_THEMES: false
 
       - name: optimize assets
         run: bash scripts/optimize.sh public
