@@ -18,6 +18,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
+          cache: npm
+
+      - name: install JavaScript dependencies
+        run: npm ci
 
       - name: install Zola 0.22.1
         run: |

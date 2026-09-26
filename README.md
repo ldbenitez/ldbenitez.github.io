@@ -18,11 +18,13 @@ zola check
 zola build
 python3 tests/site_smoke.py
 node --test tests/cosmos-*.test.mjs
+npm ci
 bash scripts/optimize.sh
 ```
 
 The optimizer runs after the build. It removes unused theme assets and minifies
-custom JavaScript when esbuild is available. CI runs it before publishing.
+JavaScript with the pinned esbuild dependency. It fails if esbuild is unavailable,
+so CI cannot publish unminified scripts.
 
 ## Content
 
