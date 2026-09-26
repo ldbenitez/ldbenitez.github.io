@@ -1,0 +1,1 @@
+const u="/audio/stillness.mp3";export function createAmbience(o=globalThis.Audio){let e=null;async function t(){if(!o)throw new Error("Audio playback is unavailable");e||(e=new o(u),e.loop=!0,e.volume=.35),await e.play()}function n(){e?.pause()}function i(){e&&(e.pause(),e.removeAttribute("src"),e.load(),e=null)}return{start:t,stop:n,dispose:i,supported:!!o}}

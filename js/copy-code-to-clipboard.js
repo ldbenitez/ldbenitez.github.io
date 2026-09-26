@@ -1,26 +1,2 @@
-const codeBlocks = document.querySelectorAll("pre code[data-lang]");
-
-for (const codeBlock of codeBlocks) {
-    let content;
-    if (codeBlock.parentElement.hasAttribute("data-linenos")) {
-        content = [...codeBlock.querySelectorAll("tr")]
-            .map((row) => row.querySelector("td:last-child")?.innerText ?? "")
-            .join("");
-    } else {
-        content = codeBlock.innerText.split("\n").filter(Boolean).join("\n");
-    }
-
-    if (navigator.clipboard !== undefined) {
-        const copyButton = document.createElement("button");
-        copyButton.classList.add("copy-button");
-        copyButton.innerText = "Copy";
-
-        copyButton.addEventListener("click", () => {
-            copyButton.innerText = "Copied!";
-            navigator.clipboard.writeText(content);
-            setTimeout(() => copyButton.innerText = "Copy", 1000);
-        });
-
-        codeBlock.prepend(copyButton);
-    }
-}
+const codeBlocks=document.querySelectorAll("pre.giallo code[data-lang]:not([data-lang='plain'])");for(const o of codeBlocks){const n=o.parentElement,l=[...o.querySelectorAll(".giallo-l")].map(e=>{const t=e.cloneNode(!0);return t.querySelectorAll(".giallo-ln").forEach(c=>c.remove()),t.textContent}).join(`
+`);if(navigator.clipboard!==void 0){const e=document.createElement("button");e.classList.add("copy-button"),e.innerText="Copy",e.addEventListener("click",()=>{e.innerText="Copied!",navigator.clipboard.writeText(l),setTimeout(()=>e.innerText="Copy",1e3)}),n.prepend(e)}}
