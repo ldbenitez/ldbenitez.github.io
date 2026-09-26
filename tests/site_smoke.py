@@ -60,11 +60,11 @@ def main() -> None:
         raise SystemExit("Missing generated files: " + ", ".join(missing))
 
     expected_text = {
-        "index.html": ("Leonardo Benítez", "Recent posts", "Posts", "Notes", "Links", "About"),
-        "posts/index.html": ("Posts", "Atom feed"),
-        "notes/index.html": ("Notes", "Atom feed"),
-        "links/index.html": ("Links", "Atom feed"),
-        "about/index.html": ("About", "Leonardo Benítez"),
+        "index.html": ("~/writing", "Recent posts", "Posts", "Notes", "Links", "About"),
+        "posts/index.html": ("~/posts", "Posts", "Atom feed"),
+        "notes/index.html": ("~/notes", "Notes", "Atom feed"),
+        "links/index.html": ("~/links", "Links", "Atom feed"),
+        "about/index.html": ("~/about", "About", "Leonardo Benítez"),
     }
     for relative_path, labels in expected_text.items():
         html = (PUBLIC / relative_path).read_text(encoding="utf-8")
@@ -73,8 +73,13 @@ def main() -> None:
                 raise SystemExit(f"{relative_path} is missing expected text: {label}")
         check_cosmos(html, relative_path)
 
+    if "<h1>Leonardo Benítez</h1>" in (PUBLIC / "index.html").read_text(encoding="utf-8"):
+        raise SystemExit("index.html repeats the site owner's name in the page heading")
+    if 'class="post content intro-page"' not in (PUBLIC / "about/index.html").read_text(encoding="utf-8"):
+        raise SystemExit("about/index.html is missing the shared intro spacing")
+
     check_cosmos((PUBLIC / "archive/index.html").read_text(encoding="utf-8"), "archive/index.html")
-    for name in ("cosmos-trigger.js", "cosmos.js", "cosmos-physics.js", "cosmos-art.js", "cosmos-scenes.js", "cosmos-black-hole.js"):
+    for name in ("cosmos-trigger.js", "cosmos.js", "cosmos-physics.js", "cosmos-art.js", "cosmos-scenes.js", "cosmos-facts.js", "cosmos-black-hole.js", "cosmos-audio.js"):
         if not (PUBLIC / "js" / name).is_file():
             raise SystemExit(f"Missing playground asset: {name}")
 

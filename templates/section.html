@@ -14,6 +14,7 @@
 
 {%- block main -%}
 <header class="home-intro">
+    <p class="home-prompt">~/{{ section.title | lower }}</p>
     <h1>{{ section.title }}</h1>
     {%- if section.description %}
     <p>{{ section.description }}</p>

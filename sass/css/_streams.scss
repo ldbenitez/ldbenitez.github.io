@@ -2,6 +2,7 @@
 
 // Homepage introduction
 .home-intro {
+  padding-top: $spacing-lg;
   margin: 0 0 $spacing-lg;
 
   .home-prompt {
@@ -19,6 +20,14 @@
     margin: 0;
     max-width: 60ch;
     color: color-mix(in srgb, var(--text-color) 72%, transparent);
+  }
+}
+
+.post.intro-page {
+  padding: 0;
+
+  > ul {
+    margin-inline-start: 2ch;
   }
 }
 

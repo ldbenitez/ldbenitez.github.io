@@ -9,7 +9,7 @@ export function drawBlackHole(context, width, height, colors, time) {
   backdrop.addColorStop(1, 'transparent');
   context.fillStyle = backdrop;
   context.fillRect(-width / 2, -height / 2, width, height);
-  context.rotate(-0.025);
+  context.rotate(-0.12);
 
   function glow(x, y, size, color, alpha) {
     const gradient = context.createRadialGradient(x, y, 0, x, y, size);

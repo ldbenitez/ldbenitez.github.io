@@ -1,14 +1,14 @@
 // Deliberately compressed scales: a pocket atlas, not an ephemeris.
 import { drawBlackHole } from './cosmos-black-hole.js';
 export const PLANETS = Object.freeze([
-  { name: 'Mercury', color: 'muted', size: 0.45, period: 0.24, fact: 'A small, cratered world. One year lasts just 88 Earth days.' },
-  { name: 'Venus', color: 'planet', size: 0.72, period: 0.62, fact: 'Wrapped in thick clouds, Venus is the hottest planet in our Solar System.' },
-  { name: 'Earth', color: 'ocean', size: 0.8, period: 1, fact: 'Our pale blue home. The little companion circling it is the Moon.' },
-  { name: 'Mars', color: 'rust', size: 0.6, period: 1.88, fact: 'The red planet has the tallest known volcano in the Solar System: Olympus Mons.' },
-  { name: 'Jupiter', color: 'planet', size: 1.6, period: 11.86, fact: 'The giant of the family. Its Great Red Spot is a storm larger than Earth.' },
-  { name: 'Saturn', color: 'star', size: 1.3, period: 29.46, fact: 'Its spectacular rings are made mostly of countless pieces of ice.' },
-  { name: 'Uranus', color: 'ice', size: 1, period: 84.01, fact: 'An ice giant tipped on its side, with an axis tilted about 98 degrees.' },
-  { name: 'Neptune', color: 'ocean', size: 0.95, period: 164.8, fact: 'A deep-blue, windswept world. One orbit takes about 165 Earth years.' },
+  { name: 'Mercury', color: 'muted', size: 0.45, period: 0.24 },
+  { name: 'Venus', color: 'planet', size: 0.72, period: 0.62 },
+  { name: 'Earth', color: 'ocean', size: 0.8, period: 1 },
+  { name: 'Mars', color: 'rust', size: 0.6, period: 1.88 },
+  { name: 'Jupiter', color: 'planet', size: 1.6, period: 11.86 },
+  { name: 'Saturn', color: 'star', size: 1.3, period: 29.46 },
+  { name: 'Uranus', color: 'ice', size: 1, period: 84.01 },
+  { name: 'Neptune', color: 'ocean', size: 0.95, period: 164.8 },
 ]);
 
 export function orbit(index, time) {
@@ -32,11 +32,26 @@ export function galaxyStars() {
   });
 }
 
+function beltDust(count, seed) {
+  let state = seed;
+  const random = () => { state = (1664525 * state + 1013904223) >>> 0; return state / 4294967296; };
+  return Array.from({ length: count }, (_, i) => ({
+    angle: (i + (random() - 0.5) * 0.8) * Math.PI * 2 / count,
+    // Favor the middle of the band, with a few grains toward either edge.
+    radius: (random() + random()) / 2,
+    size: random() < 0.07 ? 1.5 + random() * 0.6 : 0.6 + random() * 0.8,
+    alpha: 0.25 + random() * 0.5,
+  }));
+}
+
 export function createAtlas(context, scenery) {
   const stars = galaxyStars();
+  const asteroids = beltDust(2400, 281);
+  const kuiperObjects = beltDust(3400, 867);
   const times = { solar: 0, galaxy: 0, blackhole: 0 };
   let targets = [];
-  let selected = 2;
+  let selected = '2';
+  let solarGeometry = null;
 
   function dot(x, y, radius, color) {
     context.fillStyle = color;
@@ -55,9 +70,23 @@ export function createAtlas(context, scenery) {
   }
   function solar(width, height, colors, reducedMotion) {
     const center = { x: width / 2, y: height / 2 };
-    const extent = Math.max(1, Math.min(width / 2 - 26, (height / 2 - 36) / 0.64));
+    const outerEdge = 1.12;
+    const extent = Math.max(1, Math.min((width / 2 - 26) / outerEdge, (height / 2 - 36) / (0.64 * outerEdge)));
     const unit = Math.max(3, Math.min(9, extent / 28));
     const position = (p) => ({ x: center.x + p.x * extent, y: center.y + p.y * extent * 0.64 });
+    solarGeometry = { center, extent };
+    function belt(particles, innerRadius, outerRadius, color, speed) {
+      context.save();
+      context.fillStyle = color;
+      for (const particle of particles) {
+        const angle = particle.angle + times.solar * speed;
+        const radius = innerRadius + particle.radius * (outerRadius - innerRadius);
+        const p = position({ x: Math.cos(angle) * radius, y: Math.sin(angle) * radius });
+        context.globalAlpha = particle.alpha;
+        context.fillRect(p.x, p.y, particle.size, particle.size);
+      }
+      context.restore();
+    }
     targets = [];
     context.lineWidth = 0.7;
     for (let i = 0; i < PLANETS.length; i++) {
@@ -67,17 +96,11 @@ export function createAtlas(context, scenery) {
       context.ellipse(center.x, center.y, p.radius * extent, p.radius * extent * 0.64, 0, 0, Math.PI * 2);
       context.stroke();
     }
-    // Asteroid belt: fixed count, cheap points, no extra physics system.
-    context.fillStyle = colors.muted;
-    context.globalAlpha = 0.35;
-    for (let i = 0; i < 200; i++) {
-      const angle = i * 2.39996 + times.solar * 0.08;
-      const radius = 0.565 + (i % 7) * 0.005;
-      const p = position({ x: Math.cos(angle) * radius, y: Math.sin(angle) * radius });
-      context.fillRect(p.x, p.y, 1, 1);
-    }
-    context.globalAlpha = 1;
+    // Warm asteroids sit between Mars and Jupiter; cool Kuiper objects sit beyond Neptune.
+    belt(asteroids, 0.535, 0.615, colors.rust, 0.08);
+    belt(kuiperObjects, 1.02, outerEdge, colors.secondary, 0.02);
     scenery.sun(center.x, center.y, unit * 2.3, colors, reducedMotion);
+    targets.push({ id: 'sun', ...center, radius: Math.max(unit * 2.3 + 8, 16) });
     for (let i = 0; i < PLANETS.length; i++) {
       const planet = PLANETS[i];
       const point = position(orbit(i, times.solar));
@@ -88,7 +111,7 @@ export function createAtlas(context, scenery) {
         dot(point.x + Math.cos(angle) * (radius + 7), point.y + Math.sin(angle) * (radius + 7) * 0.6, 1.5, colors.muted);
       }
       targets.push({ id: i, ...point, radius: Math.max(radius + 5, 12) });
-      if (i === selected) {
+      if (String(i) === selected) {
         context.strokeStyle = colors.text;
         context.globalAlpha = 0.5;
         context.lineWidth = 1;
@@ -97,9 +120,14 @@ export function createAtlas(context, scenery) {
         label(planet.name, Math.max(38, Math.min(width - 38, point.x)), point.y - radius - 17, colors);
       }
     }
+    if (selected === 'system') label('Solar System', center.x, center.y - unit * 2.3 - 18, colors);
+    if (selected === 'sun') label('Sun', center.x, center.y - unit * 2.3 - 18, colors);
+    if (selected === 'asteroid') label('Asteroid Belt', center.x, center.y - 0.575 * extent * 0.64 - 18, colors);
+    if (selected === 'kuiper') label('Kuiper Belt', center.x, center.y - 1.07 * extent * 0.64 - 18, colors);
   }
 
   function galaxy(width, height, colors) {
+    solarGeometry = null;
     const extent = Math.max(1, Math.min(width * 0.43, height * 0.65));
     const angle = times.galaxy * 0.025;
     const cos = Math.cos(angle), sin = Math.sin(angle);
@@ -164,15 +192,22 @@ export function createAtlas(context, scenery) {
       context.save();
       if (view === 'solar') solar(width, height, colors, reducedMotion);
       else if (view === 'galaxy') galaxy(width, height, colors);
-      else { targets = []; drawBlackHole(context, width, height, colors, times.blackhole); }
+      else { targets = []; solarGeometry = null; drawBlackHole(context, width, height, colors, times.blackhole); }
       context.restore();
     },
     hit(x, y) {
-      // Choose the nearest hit when compressed orbits place two targets close together.
-      return targets.filter((p) => Math.hypot(p.x - x, p.y - y) <= p.radius)
-        .sort((a, b) => Math.hypot(a.x - x, a.y - y) - Math.hypot(b.x - x, b.y - y))[0]?.id;
+      // Planets and the Sun take priority if a small screen puts them over a belt.
+      const target = targets.filter((p) => Math.hypot(p.x - x, p.y - y) <= p.radius)
+        .sort((a, b) => Math.hypot(a.x - x, a.y - y) - Math.hypot(b.x - x, b.y - y))[0];
+      if (target) return target.id;
+      if (!solarGeometry) return undefined;
+      const { center, extent } = solarGeometry;
+      const radius = Math.hypot((x - center.x) / extent, (y - center.y) / (extent * 0.64));
+      if (radius >= 0.52 && radius <= 0.63) return 'asteroid';
+      if (radius >= 1.01 && radius <= 1.13) return 'kuiper';
+      return undefined;
     },
-    select(index) { selected = index; },
-    reset(view) { if (view in times) times[view] = 0; if (view === 'solar') selected = 2; },
+    select(value) { selected = String(value); },
+    reset(view) { if (view in times) times[view] = 0; if (view === 'solar') selected = '2'; },
   };
 }

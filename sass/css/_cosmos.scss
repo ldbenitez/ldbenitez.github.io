@@ -1,11 +1,12 @@
 @use 'variables' as *;
 
-$cosmos-colors: (star, highlight, shadow, planet, secondary, muted, guide, grid, ocean, rust, ice, nebula, void, hot, ember, radiance);
+$cosmos-colors: (highlight, shadow, planet, secondary, muted, guide, grid, ocean, rust, ice, nebula, void, hot, ember, radiance);
 
 @each $mode in (dark, light) {
   body[data-theme='#{$mode}'] .cosmos-dialog {
-    --cosmos-background: #{theme-color($mode, background)};
-    --cosmos-text: #{theme-color($mode, text)};
+    --cosmos-background: var(--background-color);
+    --cosmos-text: var(--text-color);
+    --cosmos-star: var(--accent-color);
     @each $color in $cosmos-colors {
       --cosmos-#{$color}: #{theme-color($mode, 'cosmos-' + $color)};
     }
@@ -14,11 +15,14 @@ $cosmos-colors: (star, highlight, shadow, planet, secondary, muted, guide, grid,
 
 // Give this scene a black stage and readable controls in either site theme.
 body[data-theme] .cosmos-dialog[data-view='blackhole'] {
+  color-scheme: dark;
   --cosmos-background: #{theme-color(dark, cosmos-void)};
   --cosmos-text: #{theme-color(dark, text)};
+  --cosmos-star: #{theme-color(dark, accent)};
   @each $color in $cosmos-colors {
     --cosmos-#{$color}: #{theme-color(dark, 'cosmos-' + $color)};
   }
+  --cosmos-highlight: #{theme-color(dark, cosmos-hot)};
 }
 
 .cosmos-launcher {
@@ -55,13 +59,29 @@ body[data-theme] .cosmos-dialog[data-view='blackhole'] {
   p { margin: 0; }
   button, input, select { font: inherit; }
   [hidden] { display: none !important; }
-  select { color: var(--cosmos-text); background: var(--cosmos-background); border: 1px solid var(--cosmos-guide); border-radius: 4px; padding: 8px; min-height: 44px; }
+  select {
+    appearance: none;
+    color: var(--cosmos-text);
+    background-color: var(--cosmos-background);
+    background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%);
+    background-position: calc(100% - 26px) center, calc(100% - 20px) center;
+    background-size: 6px 6px;
+    background-repeat: no-repeat;
+    border: 1px solid var(--cosmos-guide);
+    border-radius: 4px;
+    padding: 10px 46px 10px 14px;
+    min-height: 44px;
+    font-size: 13px;
+    line-height: 1.3;
+    cursor: pointer;
+  }
   .cosmos-views { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 14px; font-size: 12px; }
   .cosmos-views [aria-pressed='true'] { color: var(--cosmos-star); border-color: var(--cosmos-star); }
-  .cosmos-atlas-info { display: flex; align-items: center; gap: 16px; padding: 12px 0; min-height: 78px; font-size: 12px; }
-  .cosmos-atlas-info label { white-space: nowrap; }
-  .cosmos-fact { max-width: 75ch; color: var(--cosmos-muted); line-height: 1.6; }
-  .cosmos-speed { display: flex; align-items: center; gap: 8px; }
+  .cosmos-atlas-info { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 20px; padding: 16px 0; min-height: 0; font-size: 12px; }
+  .cosmos-atlas-info label { display: inline-flex; align-items: center; flex: 0 0 auto; gap: 10px; white-space: nowrap; }
+  .cosmos-atlas-info select { min-width: 144px; }
+  .cosmos-fact { flex: 1 1 28ch; max-width: 75ch; color: var(--cosmos-muted); line-height: 1.6; }
+  .cosmos-speed { display: flex; align-items: center; gap: 10px; }
   button {
     color: var(--cosmos-text);
     background: transparent;
@@ -92,6 +112,8 @@ body[data-theme] .cosmos-dialog[data-view='blackhole'] {
   .cosmos-canvas { display: block; position: absolute; width: 100%; height: 100%; touch-action: none; }
   .cosmos-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-top: 12px; border-top: 1px solid var(--cosmos-grid); }
   .cosmos-actions { display: flex; flex-wrap: wrap; gap: 8px; font-size: 12px; }
+  .cosmos-actions [data-action='sound'][aria-pressed='true'] { color: var(--cosmos-star); border-color: var(--cosmos-star); }
+  .cosmos-actions [data-action='sound']:disabled { opacity: 0.6; cursor: default; }
   .cosmos-summary { font-size: 12px; color: var(--cosmos-muted); }
   .cosmos-help { font-size: 12px; color: var(--cosmos-muted); margin-top: 12px; line-height: 1.6; min-height: 2em; }
   .cosmos-message { margin: auto; padding: 32px; max-width: 50ch; line-height: 1.7; }
@@ -121,7 +143,8 @@ body[data-theme] .cosmos-dialog[data-view='blackhole'] {
     .cosmos-heading h2 { font-size: 14px; }
     .cosmos-close span { display: none; }
     .cosmos-help { font-size: 11px; margin-top: 8px; }
-    .cosmos-atlas-info { align-items: flex-start; flex-direction: column; gap: 8px; font-size: 11px; min-height: 116px; }
+    .cosmos-atlas-info { align-items: flex-start; flex-direction: column; gap: 10px; padding: 12px 0; font-size: 11px; }
+    .cosmos-fact { flex: none; }
     .cosmos-views { gap: 6px; padding-top: 10px; }
     .cosmos-toolbar { gap: 8px; padding-top: 8px; }
   }

@@ -1,6 +1,8 @@
 import { createSimulation, WORLD, circularVelocity, limitVelocity } from './cosmos-physics.js';
 import { createScenery } from './cosmos-art.js';
 import { createAtlas, PLANETS } from './cosmos-scenes.js';
+import { PLANET_FACTS, SOLAR_FEATURES, pickFactIndex } from './cosmos-facts.js';
+import { createAmbience } from './cosmos-audio.js';
 
 const RATE = 0.28;
 const DRAG_GAIN = 1.8;
@@ -15,8 +17,12 @@ export function mountPlayground({ host, signal, onFatalError }) {
       <button type="button" data-view="playground" aria-pressed="false">Playground</button>
     </div>
     <div class="cosmos-atlas-info">
-      <label data-solar-control>Explore <select data-planet aria-label="Select a planet">
+      <label data-solar-control>Explore <select data-solar-target aria-label="Choose a solar system feature">
+        <option value="system">Solar System</option>
+        <option value="sun">Sun</option>
         ${PLANETS.map((planet, index) => `<option value="${index}" ${index === 2 ? 'selected' : ''}>${planet.name}</option>`).join('')}
+        <option value="asteroid">Asteroid Belt</option>
+        <option value="kuiper">Kuiper Belt</option>
       </select></label>
       <button type="button" data-action="home" hidden>Visit the Solar System →</button>
       <p class="cosmos-fact" aria-live="polite"></p>
@@ -24,14 +30,14 @@ export function mountPlayground({ host, signal, onFatalError }) {
     <div class="cosmos-stage">
       <canvas class="cosmos-canvas" tabindex="0" role="img" aria-label="Gravity playground"
         aria-describedby="cosmos-description cosmos-help"></canvas>
-      <p id="cosmos-description" class="cosmos-sr">A fixed star attracts orbiting planets.
-        Launch with a drag, or use the Launch planet button for keyboard aiming.</p>
+      <p id="cosmos-description" class="cosmos-sr">Explore the Sun, eight planets, and two belts of small objects.</p>
     </div>
     <div class="cosmos-toolbar">
       <div class="cosmos-actions">
         <button type="button" data-action="launch">Launch planet</button>
         <button type="button" data-action="pause">Pause</button>
         <button type="button" data-action="reset">Reset</button>
+        <button type="button" data-action="sound" aria-pressed="false">Play ambience</button>
         <label class="cosmos-speed" hidden>Speed <select data-speed aria-label="Animation speed">
           <option value="0.25">¼×</option><option value="1" selected>1×</option>
           <option value="4">4×</option><option value="12">12×</option>
@@ -49,11 +55,12 @@ export function mountPlayground({ host, signal, onFatalError }) {
   const launchButton = host.querySelector('[data-action="launch"]');
   const pauseButton = host.querySelector('[data-action="pause"]');
   const resetButton = host.querySelector('[data-action="reset"]');
+  const soundButton = host.querySelector('[data-action="sound"]');
   const summary = host.querySelector('.cosmos-summary');
   const help = host.querySelector('#cosmos-help');
   const announcement = host.querySelector('[data-announcement]');
   const viewButtons = [...host.querySelectorAll('[data-view]')];
-  const planetSelect = host.querySelector('[data-planet]');
+  const solarSelect = host.querySelector('[data-solar-target]');
   const solarControl = host.querySelector('[data-solar-control]');
   const homeButton = host.querySelector('[data-action="home"]');
   const fact = host.querySelector('.cosmos-fact');
@@ -63,12 +70,14 @@ export function mountPlayground({ host, signal, onFatalError }) {
   const listeners = new AbortController();
   const scenery = createScenery(context);
   const atlas = createAtlas(context, scenery);
+  const ambience = createAmbience();
   let view = 'solar';
   let speed = 1;
   let simulation = createSimulation();
   let paused = motion.matches;
   let reducedMotion = motion.matches;
   let disposed = false;
+  let soundEnabled = false;
   let frame = null;
   let lastTime = null;
   let accumulator = 0;
@@ -78,6 +87,7 @@ export function mountPlayground({ host, signal, onFatalError }) {
   let density = 1;
   let aim = null;
   let colors = {};
+  const previousFacts = new Map();
   let resizeObserver;
   let themeObserver;
 
@@ -226,10 +236,19 @@ export function mountPlayground({ host, signal, onFatalError }) {
     draw();
     return true;
   }
-  function selectPlanet(index) {
-    planetSelect.value = String(index);
-    atlas.select(index);
-    fact.textContent = `${PLANETS[index].name} — ${PLANETS[index].fact}`;
+  function showSolarFact(value, chooseNew = true) {
+    const target = SOLAR_FEATURES[value] ?? PLANETS[Number(value)];
+    const facts = SOLAR_FEATURES[value]?.facts ?? PLANET_FACTS[Number(value)];
+    if (!target || !facts) return;
+    const previous = previousFacts.get(value);
+    const index = chooseNew || previous === undefined ? pickFactIndex(facts.length, previous) : previous;
+    previousFacts.set(value, index);
+    fact.textContent = facts[index];
+  }
+  function selectSolarTarget(value, chooseNew = true) {
+    solarSelect.value = value;
+    atlas.select(value);
+    showSolarFact(value, chooseNew);
     draw();
   }
   function changeView(next) {
@@ -248,16 +267,20 @@ export function mountPlayground({ host, signal, onFatalError }) {
     const title = view === 'solar' ? 'Solar System' : view === 'galaxy' ? 'Milky Way' : view === 'blackhole' ? 'Black Hole' : 'Gravity playground';
     canvas.setAttribute('aria-label', title);
     host.querySelector('#cosmos-description').textContent = view === 'solar'
-      ? 'Eight planets orbit the Sun. Select a planet with the Explore menu or by tapping it.'
+      ? 'Explore the Sun, eight planets, and the asteroid and Kuiper belts. Choose a feature from the menu or tap it.'
       : view === 'galaxy' ? 'An illustrative spiral galaxy. Use Visit the Solar System to explore our neighborhood.'
       : view === 'blackhole' ? 'A dark black-hole shadow encircled by a bright photon ring. An orange and gold accretion disk appears bent above and below it.'
       : 'A fixed star attracts orbiting planets. Drag to launch, or use Launch planet for keyboard aiming.';
-    help.textContent = view === 'solar' ? 'Tap a planet to explore. Sizes, distances, and orbital speeds are compressed for this miniature.'
+    help.textContent = view === 'solar' ? 'Tap the Sun, a planet, or either belt to explore. Sizes, distances, and orbital speeds are compressed for this miniature.'
       : view === 'galaxy' ? 'Tap “You are here” to visit home. An artistic view of the Milky Way; rotation is illustrative.'
       : view === 'blackhole' ? 'Inspired by Interstellar. An artistic impression of gravitational lensing; sizes and motion are illustrative.' : DEFAULT_HELP;
-    if (view === 'solar') selectPlanet(Number(planetSelect.value));
-    if (view === 'galaxy') fact.textContent = 'One galaxy, hundreds of billions of stars. Our Sun lives roughly 26,000 light-years from the center.';
-    if (view === 'blackhole') fact.textContent = 'The horizon itself emits no light. The glow comes from hot matter around it, with gravity bending the far side of the disk into view.';
+    if (view === 'solar') selectSolarTarget(solarSelect.value, false);
+    if (view === 'galaxy') {
+      fact.textContent = 'Our Sun lives roughly 26,000 light-years from the center of this galaxy, which holds hundreds of billions of stars.';
+    }
+    if (view === 'blackhole') {
+      fact.textContent = 'The horizon itself emits no light. The glow comes from hot matter around it, with gravity bending the far side of the disk into view.';
+    }
     status(); draw(); schedule();
   }
   function finishLaunch() {
@@ -298,6 +321,7 @@ export function mountPlayground({ host, signal, onFatalError }) {
   function dispose() {
     if (disposed) return;
     disposed = true;
+    ambience.dispose();
     stopClock();
     listeners.abort();
     signal.removeEventListener('abort', dispose);
@@ -313,16 +337,40 @@ export function mountPlayground({ host, signal, onFatalError }) {
     signal.addEventListener('abort', dispose, { once: true });
     if (signal.aborted) { dispose(); return { dispose, cancelAim }; }
     for (const button of viewButtons) listen(button, 'click', () => changeView(button.dataset.view));
-    listen(planetSelect, 'change', () => selectPlanet(Number(planetSelect.value)));
+    listen(solarSelect, 'change', () => selectSolarTarget(solarSelect.value));
     listen(homeButton, 'click', () => { changeView('solar'); viewButtons[0].focus({ preventScroll: true }); });
     listen(speedSelect, 'change', () => { speed = Number(speedSelect.value); });
+    soundButton.hidden = !ambience.supported;
+    listen(soundButton, 'click', () => {
+      if (soundEnabled) {
+        soundEnabled = false;
+        ambience.stop();
+        soundButton.textContent = 'Play ambience';
+        soundButton.setAttribute('aria-pressed', 'false');
+        announce('Ambient sound off.');
+        return;
+      }
+      soundButton.disabled = true;
+      void ambience.start().then(() => {
+        if (disposed) return;
+        soundEnabled = true;
+        soundButton.disabled = false;
+        soundButton.textContent = 'Mute ambience';
+        soundButton.setAttribute('aria-pressed', 'true');
+        announce('Ambient sound on.');
+      }).catch(() => {
+        if (disposed) return;
+        soundButton.disabled = true;
+        announce('Ambient sound is unavailable in this browser.');
+      });
+    });
     listen(canvas, 'pointerdown', (event) => {
       if (event.button !== 0 || aim?.kind === 'pointer') return;
       if (view !== 'playground') {
         const rect = canvas.getBoundingClientRect();
         const hit = atlas.hit(event.clientX - rect.left, event.clientY - rect.top);
         if (hit === 'solar') changeView('solar');
-        else if (typeof hit === 'number') selectPlanet(hit);
+        else if (hit !== undefined) selectSolarTarget(String(hit));
         return;
       }
       const point = world(event);
@@ -391,12 +439,18 @@ export function mountPlayground({ host, signal, onFatalError }) {
     listen(resetButton, 'click', () => {
       cancelAim();
       if (view === 'playground') simulation.reset();
-      else { atlas.reset(view); if (view === 'solar') selectPlanet(2); }
+      else { atlas.reset(view); if (view === 'solar') selectSolarTarget('2'); }
       scenery.reset(); stopClock(); status(); draw(); schedule();
       announce(view === 'playground' ? 'Reset to three planets.' : 'View reset.');
     });
     listen(motion, 'change', syncMotionPreference);
-    listen(document, 'visibilitychange', () => { stopClock(); schedule(); });
+    listen(document, 'visibilitychange', () => {
+      stopClock(); schedule();
+      if (soundEnabled) {
+        if (document.hidden) ambience.stop();
+        else void ambience.start().catch(() => {});
+      }
+    });
     listen(window, 'resize', resize);
     resizeObserver = new ResizeObserver(guarded(resize));
     resizeObserver.observe(canvas);
