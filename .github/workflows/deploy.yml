@@ -19,14 +19,15 @@ jobs:
         with:
           node-version: "22"
 
-      - name: build with Zola 0.22.1
-        uses: shalzz/zola-deploy-action@v0.22.1
-        env:
-          BUILD_ONLY: true
-          BUILD_THEMES: false
+      - name: install Zola 0.22.1
+        run: |
+          curl -fsSL "https://github.com/getzola/zola/releases/download/v0.22.1/zola-v0.22.1-x86_64-unknown-linux-gnu.tar.gz" -o zola.tar.gz
+          tar -xzf zola.tar.gz zola
+          sudo mv zola /usr/local/bin/zola
+          zola --version
 
-      - name: restore build output ownership
-        run: sudo chown -R "$(id -u):$(id -g)" public
+      - name: build site
+        run: zola build
 
       - name: optimize assets
         run: bash scripts/optimize.sh public
