@@ -12,12 +12,19 @@ zola serve
 ## Verify and build
 
 ```bash
-zola check             # validate content, templates, and links
-zola build             # generate the static site into public/
-python3 tests/site_smoke.py   # check routes, key content, and section feeds
+zola check              # validate content, templates, and links
+zola build              # generate the static site into public/
+bash scripts/optimize.sh   # prune unused theme assets and minify custom JS
+python3 tests/site_smoke.py    # check routes, key content, and section feeds
 ```
 
-> Use Zola 0.21.x to match the version used by the GitHub Pages deploy action.
+> Use Zola 0.21.x to match the version pinned in `.github/workflows/deploy.yml`.
+
+`scripts/optimize.sh` runs after `zola build`. It deletes assets Zola copies from
+the theme but that no built page references (KaTeX, Fira Code, unused social
+icons) and minifies the custom JavaScript in `public/js` with esbuild when
+available. The deploy workflow runs it automatically; run it locally only when
+inspecting the optimized output.
 
 ## Content
 

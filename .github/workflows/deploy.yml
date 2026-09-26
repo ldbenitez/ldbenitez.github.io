@@ -13,8 +13,27 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: true
-      - name: build_and_deploy
-        uses: shalzz/zola-deploy-action@v0.21.0
-        env:
-          PAGES_BRANCH: gh-pages
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: install zola 0.21.0
+        run: |
+          curl -sSfL "https://github.com/getzola/zola/releases/download/v0.21.0/zola-v0.21.0-x86_64-unknown-linux-gnu.tar.gz" | tar -xz
+          sudo mv zola /usr/local/bin/zola
+          zola --version
+
+      - name: zola build
+        run: zola build
+
+      - name: optimize assets
+        run: bash scripts/optimize.sh public
+
+      - name: deploy
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          publish_branch: gh-pages

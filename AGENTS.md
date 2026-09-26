@@ -6,8 +6,8 @@ Zola static site; custom templates/styles layered over the Terminus theme (git s
 
 - This site builds with **Zola 0.21.x only**. Zola ≥0.22 cannot build it as-is: Tera 2 removed the macro syntax the Terminus templates use (`post_macros::header(...)` fails to parse), and `[markdown]` config keys changed (`highlight_code`/`highlight_theme` → `[markdown.highlighting]`, Syntect → Giallo).
 - Homebrew's `zola` is 0.23.x — do not use it. A 0.21.0 binary lives at `~/.local/bin/zola`; make sure it resolves before brew's in PATH. (Fresh machines: grab the 0.21.0 release from getzola/zola GitHub releases.)
-- The deploy workflow builds with Zola 0.21.0 (`shalzz/zola-deploy-action@v0.21.0` — the action's version tags track Zola versions). Local and CI versions must match or deploys break.
-- Upgrading to 0.23 means a real migration (templates → Tera 2 components, highlighting config, action bump) — not a version bump.
+- The deploy workflow downloads the Zola 0.21.0 Linux release directly (`.github/workflows/deploy.yml`). Local and CI versions must match or deploys break.
+- Upgrading to 0.23 means a real migration (templates → Tera 2 components, highlighting config, workflow bump) — not a version bump.
 
 ## Commands
 
@@ -15,10 +15,11 @@ Zola static site; custom templates/styles layered over the Terminus theme (git s
 zola serve                      # dev server
 zola check                      # validate content, templates, links
 zola build                      # build into public/ (gitignored)
+bash scripts/optimize.sh         # post-build: prune unreferenced theme assets, minify custom JS (esbuild, best-effort)
 python3 tests/site_smoke.py      # full verification: check + build, then asserts routes, key text, section feeds
 ```
 
-Run `tests/site_smoke.py` after any config, template, or content-structure change. It shells out to `zola` from PATH, so the 0.21 binary must resolve first.
+Run `tests/site_smoke.py` after any config, template, or content-structure change. It shells out to `zola` from PATH, so the 0.21 binary must resolve first. Run `scripts/optimize.sh` only to inspect the optimized output; it is destructive to `public/` and CI reruns it from a clean build.
 
 ## Architecture
 
@@ -28,10 +29,11 @@ Run `tests/site_smoke.py` after any config, template, or content-structure chang
 - Sass load order in `sass/css/style.scss`: theme first, then local partials (fonts → overrides → header → syntax → streams). New listing styles go in `sass/css/_streams.scss`.
 - Dark/light palettes are Sass maps in `sass/css/_variables.scss`, applied via the `theme-color()` helper in `_overrides.scss`. Change colors in the maps, not ad-hoc hex values. `static/js/theme-toggle.js` has a `COLORS` map that must match the palette backgrounds.
 - Content model (front matter per section type) is documented in `README.md`. Note: a Link page without `extra.target_url` fails the build (template reads it directly).
+- `scripts/optimize_public.py` prunes fonts/images (and two unused theme JS/CSS files) that the built HTML/CSS never reference, because Zola copies the theme's whole `static/` tree. It reads references from `public/**` — if you add a dynamically-injected `<img src>` that no static scan can see, whitelist it there rather than in the theme.
 
 ## Deployment
 
-- Push to `main` → `.github/workflows/deploy.yml` rebuilds from source **in CI** with Zola 0.21.0 (submodules checked out) and pushes to `gh-pages`. GitHub Pages serves the `gh-pages` branch.
+- Push to `main` → `.github/workflows/deploy.yml` rebuilds from source **in CI** with Zola 0.21.0 (submodules checked out), runs `scripts/optimize.sh`, and publishes `public/` to `gh-pages`. GitHub Pages serves the `gh-pages` branch.
 - `public/` is gitignored: local build output never reaches Pages. Building locally is for preview only.
 
 ## Tera/Zola gotchas (0.21)
