@@ -149,3 +149,25 @@ body[data-theme] .cosmos-dialog[data-view='blackhole'] {
     .cosmos-toolbar { gap: 8px; padding-top: 8px; }
   }
 }
+
+@media (max-width: 600px) {
+  .cosmos-dialog:not(.cosmos-prompt) {
+    .cosmos-content { flex: 0 0 auto; min-height: 0; }
+    .cosmos-stage { flex: none; height: clamp(280px, 74vw, 440px); min-height: 0; }
+    .cosmos-views { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .cosmos-views button { padding: 7px 8px; min-height: 40px; font-size: 11px; }
+    .cosmos-atlas-info { padding: 9px 0; gap: 8px; }
+    .cosmos-atlas-info select { min-width: 0; }
+    .cosmos-actions { gap: 6px; }
+    .cosmos-actions button { padding: 7px 9px; min-height: 40px; font-size: 11px; }
+    .cosmos-actions select { min-height: 40px; padding-top: 7px; padding-bottom: 7px; }
+    .cosmos-summary { width: 100%; }
+  }
+}
+
+@media (min-width: 601px) and (max-height: 500px) {
+  .cosmos-dialog:not(.cosmos-prompt) {
+    .cosmos-content { flex: 0 0 auto; min-height: 0; }
+    .cosmos-stage { flex: none; height: clamp(360px, 74vw, 640px); min-height: 0; }
+  }
+}

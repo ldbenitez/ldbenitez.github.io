@@ -39,7 +39,6 @@
     {%- if config.extra.color_scheme_switcher %}
     <script src="{{ get_url(path="js/theme-switcher.js", cachebust=true) }}" defer></script>
     {%- endif %}
-    <script src="{{ get_url(path="js/theme-toggle.js", cachebust=true) }}" defer></script>
     <script src="{{ get_url(path="js/cosmos-trigger.js", cachebust=true) }}" defer></script>
     {%- if config_macros::get(setting="katex", default_global_value=false) == "true" %}
     <link rel="stylesheet" href="{{ get_url(path="css/katex.min.css", cachebust=true) }}">
@@ -157,7 +156,7 @@
 </head>
 
 <body class="layout-{{ config.extra.layout }}" data-theme="{{ config.extra.color_scheme | default(value = "terminus") }}">
-    <script>document.body.dataset.theme=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');</script>
+    <script src="{{ get_url(path="js/theme-toggle.js", cachebust=true) }}"></script>
     <header class="header">
         {% filter indent -%}{%- filter indent -%}
         {%- block header -%}
